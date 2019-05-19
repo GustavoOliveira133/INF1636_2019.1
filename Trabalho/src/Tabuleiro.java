@@ -7,7 +7,11 @@ import javax.imageio.*;
 public class Tabuleiro extends JPanel {
 	private Tabuleiro t=this;
 	private Image tabuleiro=null;
-	private Image []pinos=new Image[5];
+	private Pino pino1;
+	private Pino pino2;
+	private Pino pino3;
+	private Pino pino4;
+	private Pino pino5;
 	
 	public Tabuleiro() {
 		try {
@@ -18,18 +22,13 @@ public class Tabuleiro extends JPanel {
 			System.exit(1);
 		}
 		
-		try {
-			pinos[0]=ImageIO.read(new File("pin0.png"));
-			pinos[1]=ImageIO.read(new File("pin1.png"));
-			pinos[2]=ImageIO.read(new File("pin2.png"));
-			pinos[3]=ImageIO.read(new File("pin3.png"));
-			pinos[4]=ImageIO.read(new File("pin4.png"));
+		pino1=new Pino("pin0.png",880,880);
+		pino2=new Pino("pin1.png",915,880);
+		pino3=new Pino("pin2.png",950,880);
+		pino4=new Pino("pin3.png",880,930);
+		pino5=new Pino("pin4.png",915,930);
 
-		}
-		catch(IOException e) {
-			System.out.println(e.getMessage());
-			System.exit(1);
-		}
+
 		addMouseListener(new MouseListener() {
     		public void mouseEntered(MouseEvent e) {}
     		public void mousePressed(MouseEvent e) {}
@@ -46,10 +45,10 @@ public class Tabuleiro extends JPanel {
 		super.paintComponent(g);
 		Graphics2D gd2=(Graphics2D) g;
 		gd2.drawImage(tabuleiro,0,0,null);
-		gd2.drawImage(pinos[0],880,880,null);
-		gd2.drawImage(pinos[1],915,880,null);
-		gd2.drawImage(pinos[2],950,880,null);
-		gd2.drawImage(pinos[3],880,930,null);
-		gd2.drawImage(pinos[4],915,930,null);
+		gd2.drawImage(pino1.getImage(),880,880,null);
+		gd2.drawImage(pino2.getImage(),915,880,null);
+		gd2.drawImage(pino3.getImage(),950,880,null);
+		gd2.drawImage(pino4.getImage(),880,930,null);
+		gd2.drawImage(pino5.getImage(),915,930,null);
 	}
 }

@@ -3,7 +3,6 @@ import javax.swing.*;
 public class FramePrincipal extends JFrame {
 	public final int LARG_DEFAULT=1025;
 	public final int ALT_DEFAULT=1055;
-	public Posicao []p=new Posicao[5];
 	
 	public FramePrincipal() {
 		setTitle("Banco Imobiliário");		
