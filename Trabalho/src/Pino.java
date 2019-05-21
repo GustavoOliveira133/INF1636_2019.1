@@ -6,9 +6,9 @@ import javax.imageio.ImageIO;
 
 public class Pino {
 	private Image i=null;
-	private double x, y;
+	private int x, y;
 	
-	public Pino(String s,double w, double z) {
+	public Pino(String s,int w, int z) {
 		x=w;
 		y=z;
 		try {
@@ -22,10 +22,10 @@ public class Pino {
 	public Image getImage() {
 		return i;
 	}
-	public double getXPino() {
+	public int getXPino() {
 		return x;
 	}
-	public double getYPino() {
+	public int getYPino() {
 		return y;
 	}
 }
