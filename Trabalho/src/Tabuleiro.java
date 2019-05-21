@@ -8,7 +8,7 @@ public class Tabuleiro extends JPanel {
 	private Tabuleiro t=this;
 	private Image tabuleiro=null;
 	private Dados d[]=new Dados[6];
-	private Pino pinos[]=new Pino[5];
+	private Pino pinos[]=new Pino[6];
     private int dados[]=new int[2];
 
 	
@@ -21,11 +21,12 @@ public class Tabuleiro extends JPanel {
 			System.exit(1);
 		}
 		//Criando os pinos
-		pinos[0]=new Pino("pin0.png",880.0,880.0);
-		pinos[1]=new Pino("pin1.png",915.0,880.0);
-		pinos[2]=new Pino("pin2.png",950.0,880.0);
-		pinos[3]=new Pino("pin3.png",880.0,930.0);
-		pinos[4]=new Pino("pin4.png",915.0,930.0);
+		pinos[0]=new Pino("pin0.png",880,880);
+		pinos[1]=new Pino("pin1.png",915,880);
+		pinos[2]=new Pino("pin2.png",950,880);
+		pinos[3]=new Pino("pin3.png",880,930);
+		pinos[4]=new Pino("pin4.png",915,930);
+		pinos[5]=new Pino("pin5.png",950,930);
 		
 		//Criando os dados
 		d[0]=new Dados("die_face_1.png");
@@ -42,16 +43,16 @@ public class Tabuleiro extends JPanel {
     		public void mouseReleased(MouseEvent e) {}
     		public void mouseExited(MouseEvent e) {}
     		public void mouseClicked(MouseEvent e) {
-/* *********** Teste para a seleção dos pinos ****************************  */
-    			double x=e.getX();
-    			double y=e.getY();
-    			for (int i=0;i<5;i++) {
+/* *********** Teste para a seleÃ§Ã£o dos pinos ****************************  */
+    			int x=e.getX();
+    			int y=e.getY();
+    			for (int i=0;i<6;i++) {
     				if ((x >= (pinos[i].getXPino()) && x <= (pinos[i].getXPino()+25.0)) && (y >= (pinos[i].getYPino()) && y <= (pinos[i].getYPino()+35.0))) {
         				System.out.printf("Pino %d Selecionado\n",i+1);
         				
-        				//Janela de diálogo para confirmar a seleção do pino
+        				//Janela de diÃ¡logo para confirmar a seleÃ§Ã£o do pino
         				Object[] options = { "Confirmar", "Cancelar" };
-        				int opcao = JOptionPane.showOptionDialog(t, "Deseja andar com o pino selecionado?", "Confirmar seleção de pino", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        				int opcao = JOptionPane.showOptionDialog(t, "Deseja andar com o pino selecionado?", "Confirmar seleÃ§Ã£o de pino", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         				if(opcao==1 || opcao==-1) {
         					break;
         				}
@@ -83,7 +84,7 @@ public class Tabuleiro extends JPanel {
     				d[dados[1]].unsetFlag();
     				d[dados[0]].unsetRepetido();
     			}
-/* ************* Fim teste seleção dos pinos ******************************** */
+/* ************* Fim teste seleÃ§Ã£o dos pinos ******************************** */
     			//String msg=String.format("x=%.1f y=%.1f\n",x,y);
      			//JOptionPane.showMessageDialog(t,msg);
     		}
@@ -94,11 +95,12 @@ public class Tabuleiro extends JPanel {
 		super.paintComponent(g);
 		Graphics2D gd2=(Graphics2D) g;
 		gd2.drawImage(tabuleiro,0,0,null);
-		gd2.drawImage(pinos[0].getImage(),880,880,null);
-		gd2.drawImage(pinos[1].getImage(),915,880,null);
-		gd2.drawImage(pinos[2].getImage(),950,880,null);
-		gd2.drawImage(pinos[3].getImage(),880,930,null);
-		gd2.drawImage(pinos[4].getImage(),915,930,null);
+		gd2.drawImage(pinos[0].getImage(),pinos[0].getXPino(),pinos[0].getYPino(),null);
+		gd2.drawImage(pinos[1].getImage(),pinos[1].getXPino(),pinos[1].getYPino(),null);
+		gd2.drawImage(pinos[2].getImage(),pinos[2].getXPino(),pinos[2].getYPino(),null);
+		gd2.drawImage(pinos[3].getImage(),pinos[3].getXPino(),pinos[3].getYPino(),null);
+		gd2.drawImage(pinos[4].getImage(),pinos[4].getXPino(),pinos[4].getYPino(),null);
+		gd2.drawImage(pinos[5].getImage(),pinos[5].getXPino(),pinos[5].getYPino(),null);
 		int p=0;
 		for(int i=0;i<6;i++) {
 			if(d[i].getFlag()==true) {
