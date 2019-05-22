@@ -6,7 +6,7 @@ import javax.imageio.*;
 
 public class Tabuleiro extends JPanel {
 	private Tabuleiro t=this;
-	private Image tabuleiro=null;
+	private Image tabuleiro=null, teste=null;
 	private Dados d[]=new Dados[6];
 	private Pino pinos[]=new Pino[6];
     private int dados[]=new int[2];
@@ -15,6 +15,7 @@ public class Tabuleiro extends JPanel {
 	public Tabuleiro() {
 		try {
 			tabuleiro=ImageIO.read(new File("tabuleiroRJ.jpg"));
+			teste=ImageIO.read(new File("chance1.png"));
 		}
 		catch(IOException e) {
 			System.out.println(e.getMessage());
@@ -94,6 +95,7 @@ public class Tabuleiro extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D gd2=(Graphics2D) g;
+		
 		gd2.drawImage(tabuleiro,0,0,null);
 		gd2.drawImage(pinos[0].getImage(),pinos[0].getXPino(),pinos[0].getYPino(),null);
 		gd2.drawImage(pinos[1].getImage(),pinos[1].getXPino(),pinos[1].getYPino(),null);
