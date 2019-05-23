@@ -8,26 +8,21 @@ public class Tabuleiro extends JPanel {
 	private Tabuleiro t=this;
 	private Image tabuleiro=null, teste=null;
 	private Dados d[]=new Dados[6];
-	private Pino pinos[]=new Pino[6];
+	private Pino pinos[]=null;
     private int dados[]=new int[2];
+    private Controlador ctrl;
 
 	
 	public Tabuleiro(Controlador ctrl) {
+		this.ctrl=ctrl;
 		try {
 			tabuleiro=ImageIO.read(new File("tabuleiroRJ.jpg"));
-			teste=ImageIO.read(new File("chance1.png"));
 		}
 		catch(IOException e) {
 			System.out.println(e.getMessage());
 			System.exit(1);
 		}
-		//Criando os pinos
-		pinos[0]=new Pino("pin0.png",880,880);
-		pinos[1]=new Pino("pin1.png",915,880);
-		pinos[2]=new Pino("pin2.png",950,880);
-		pinos[3]=new Pino("pin3.png",880,930);
-		pinos[4]=new Pino("pin4.png",915,930);
-		pinos[5]=new Pino("pin5.png",950,930);
+		
 		
 		//Criando os dados
 		d[0]=new Dados("die_face_1.png");
@@ -44,79 +39,99 @@ public class Tabuleiro extends JPanel {
     		public void mouseReleased(MouseEvent e) {}
     		public void mouseExited(MouseEvent e) {}
     		public void mouseClicked(MouseEvent e) {
-/* *********** Teste para a seleÃ§Ã£o dos pinos ****************************  */
+    			//Pega as coordenadas do click do mouse e mostra na tela
     			int x=e.getX();
-    			int y=e.getY();
-    			for (int i=0;i<6;i++) {
-    				if ((x >= (pinos[i].getXPino()) && x <= (pinos[i].getXPino()+25)) && (y >= (pinos[i].getYPino()) && y <= (pinos[i].getYPino()+35))) {
-        				System.out.printf("Pino %d Selecionado\n",i+1);
-        				
-        				//Janela de diÃ¡logo para confirmar a seleÃ§Ã£o do pino
-        				Object[] options = { "Confirmar", "Cancelar" };
-        				int opcao = JOptionPane.showOptionDialog(t, "Deseja andar com o pino selecionado?", "Confirmar seleÃ§Ã£o de pino", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        				if(opcao==1 || opcao==-1) {
-        					break;
-        				}
-
-        				
-        				//Rolando os dados
-        				dados[0]=Dados.rolaDados();
-        				dados[1]=Dados.rolaDados();
-        				
-        				//Pintar os dados no tabuleiro
-        				if(dados[0]!=dados[1]) {
-            				d[dados[0]].setFlag();
-            				repaint();
-            				d[dados[1]].setFlag();
-            				repaint();
-        				}
-        				else {
-            				d[dados[0]].setFlag();
-        					d[dados[0]].setRepetido();
-        					repaint();
-        				}
-        				//Andar o pino (atualizar o tabuleiro)
-        				
-        				//Mostrar coordenadas clicadas
-        				String msg1=String.format("Valor rolado nos dados:%d\n",(dados[0]+dados[1])+2);
-        				JOptionPane.showMessageDialog(t, msg1);
-        			}
-    				d[dados[0]].unsetFlag();
-    				d[dados[1]].unsetFlag();
-    				d[dados[0]].unsetRepetido();
-    			}
-/* ************* Fim teste seleÃ§Ã£o dos pinos ******************************** */
+    			int y=e.getY(); 			
     			String msg=String.format("x=%d y=%d\n",x,y);
      			JOptionPane.showMessageDialog(t,msg);
     		}
     	});
 	}
 	
+	public void clicouNosDados(int d1, int d2) {
+		//Pintar os dados no tabuleiro
+		if(d1!=d2) {
+			d[d1].setFlag();
+			t.repaint();
+			d[d2].setFlag();
+		}
+		else {
+			d[d1].setFlag();
+			d[d1].setRepetido();
+		}
+		repaint();
+	}
+	
+	public void criaPinos() {
+		//Criar os pinos de acordo com a quantidade de jogadores selecionado e pinta-los no tabuleiro
+		int qtd=ctrl.getJogadores();
+		pinos=new Pino[qtd];
+		if (qtd==2) {
+			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[1]=new Pino("pin1.png",915,880);
+		}
+		else if (qtd==3) {
+			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[1]=new Pino("pin1.png",915,880);
+			pinos[2]=new Pino("pin2.png",950,880);
+		}
+		else if(qtd==4) {
+			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[1]=new Pino("pin1.png",915,880);
+			pinos[2]=new Pino("pin2.png",950,880);
+			pinos[3]=new Pino("pin3.png",880,930);
+		}
+		else if(qtd==5) {
+			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[1]=new Pino("pin1.png",915,880);
+			pinos[2]=new Pino("pin2.png",950,880);
+			pinos[3]=new Pino("pin3.png",880,930);
+			pinos[4]=new Pino("pin4.png",915,930);
+		}
+		else if(qtd==6) {
+			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[1]=new Pino("pin1.png",915,880);
+			pinos[2]=new Pino("pin2.png",950,880);
+			pinos[3]=new Pino("pin3.png",880,930);
+			pinos[4]=new Pino("pin4.png",915,930);
+			pinos[5]=new Pino("pin5.png",950,930);
+		}
+		repaint();
+	}
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D gd2=(Graphics2D) g;
-		
+		//Pinta o tabuleiro
 		gd2.drawImage(tabuleiro,0,0,null);
-		gd2.drawImage(pinos[0].getImage(),pinos[0].getXPino(),pinos[0].getYPino(),null);
-		gd2.drawImage(pinos[1].getImage(),pinos[1].getXPino(),pinos[1].getYPino(),null);
-		gd2.drawImage(pinos[2].getImage(),pinos[2].getXPino(),pinos[2].getYPino(),null);
-		gd2.drawImage(pinos[3].getImage(),pinos[3].getXPino(),pinos[3].getYPino(),null);
-		gd2.drawImage(pinos[4].getImage(),pinos[4].getXPino(),pinos[4].getYPino(),null);
-		gd2.drawImage(pinos[5].getImage(),pinos[5].getXPino(),pinos[5].getYPino(),null);
-		int p=0;
-		for(int i=0;i<6;i++) {
-			if(d[i].getFlag()==true) {
-				if(d[i].getRepetido()==true) {
-					gd2.drawImage(d[i].getImage(),150,565,null);
-					gd2.drawImage(d[i].getImage(),550,565,null);
+		
+		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
+		for(int i=0;i<ctrl.getJogadores();i++) {
+			gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino()-800,pinos[i].getYPino(),null);
+		}
+		
+		int p=0; //valor para conferir se um dado nao-repetido ja foi pintado (sera usado mais adiante)
+		/*Percorre o vetor de dados e verifica quais tem a flag == true (ou seja, tem que ser pintado).
+		Depois de pintado a flag volta a ser false. Verifica tambem se o valor rolado nos dados eh repetido*/
+		for(int j=0;j<6;j++) {
+			if(d[j].getFlag()==true) {
+				if(d[j].getRepetido()==true) {
+					gd2.drawImage(d[j].getImage(),150,565,null);
+					gd2.drawImage(d[j].getImage(),550,565,null);
+					d[j].unsetFlag();
+					d[j].unsetRepetido();
 					break;
 				}
 				else if (p==0) {
-					gd2.drawImage(d[i].getImage(),150,565,null);
+					gd2.drawImage(d[j].getImage(),150,565,null);
+					d[j].unsetFlag();
 					p=1;
 				}
-				else if (p==1)
-					gd2.drawImage(d[i].getImage(),550,565,null);
+				else if (p==1) {
+					gd2.drawImage(d[j].getImage(),550,565,null);
+					d[j].unsetFlag();
+				}
+				
 			}
 		}
 	}
