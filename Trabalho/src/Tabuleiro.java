@@ -116,19 +116,19 @@ public class Tabuleiro extends JPanel {
 		for(int j=0;j<6;j++) {
 			if(d[j].getFlag()==true) {
 				if(d[j].getRepetido()==true) {
-					gd2.drawImage(d[j].getImage(),150,565,null);
-					gd2.drawImage(d[j].getImage(),550,565,null);
+					gd2.drawImage(d[j].getImage(),250,700,100,100,null);
+					gd2.drawImage(d[j].getImage(),550,700,100,100,null);
 					d[j].unsetFlag();
 					d[j].unsetRepetido();
 					break;
 				}
 				else if (p==0) {
-					gd2.drawImage(d[j].getImage(),150,565,null);
+					gd2.drawImage(d[j].getImage(),250,700,100,100,null);
 					d[j].unsetFlag();
 					p=1;
 				}
 				else if (p==1) {
-					gd2.drawImage(d[j].getImage(),550,565,null);
+					gd2.drawImage(d[j].getImage(),550,700,100,100,null);
 					d[j].unsetFlag();
 				}
 				
