@@ -12,7 +12,7 @@ public class Tabuleiro extends JPanel {
     private int dados[]=new int[2];
 
 	
-	public Tabuleiro() {
+	public Tabuleiro(Controlador ctrl) {
 		try {
 			tabuleiro=ImageIO.read(new File("tabuleiroRJ.jpg"));
 			teste=ImageIO.read(new File("chance1.png"));
@@ -48,7 +48,7 @@ public class Tabuleiro extends JPanel {
     			int x=e.getX();
     			int y=e.getY();
     			for (int i=0;i<6;i++) {
-    				if ((x >= (pinos[i].getXPino()) && x <= (pinos[i].getXPino()+25.0)) && (y >= (pinos[i].getYPino()) && y <= (pinos[i].getYPino()+35.0))) {
+    				if ((x >= (pinos[i].getXPino()) && x <= (pinos[i].getXPino()+25)) && (y >= (pinos[i].getYPino()) && y <= (pinos[i].getYPino()+35))) {
         				System.out.printf("Pino %d Selecionado\n",i+1);
         				
         				//Janela de diÃ¡logo para confirmar a seleÃ§Ã£o do pino
@@ -86,8 +86,8 @@ public class Tabuleiro extends JPanel {
     				d[dados[0]].unsetRepetido();
     			}
 /* ************* Fim teste seleÃ§Ã£o dos pinos ******************************** */
-    			//String msg=String.format("x=%.1f y=%.1f\n",x,y);
-     			//JOptionPane.showMessageDialog(t,msg);
+    			String msg=String.format("x=%d y=%d\n",x,y);
+     			JOptionPane.showMessageDialog(t,msg);
     		}
     	});
 	}

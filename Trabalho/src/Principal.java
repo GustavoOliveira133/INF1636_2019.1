@@ -1,6 +1,7 @@
-
+import java.awt.BorderLayout;
 public class Principal {
 	public static void main(String args[]) {
-		FramePrincipal f=new FramePrincipal();
+		FramePrincipal f=new FramePrincipal(new Controlador());
+		f.setLayout(new BorderLayout());
 	}
 }
