@@ -6,11 +6,12 @@ import javax.imageio.ImageIO;
 
 public class Pino {
 	private Image i=null;
-	private int x, y;
+	private Casa c;
+	private int x;
+	private int y;
 	
-	public Pino(String s,int w, int z) {
-		x=w;
-		y=z;
+	public Pino(String s,Casa c) {
+		this.c=c;
 		try {
 			i=ImageIO.read(new File(s));
 		}
@@ -23,9 +24,21 @@ public class Pino {
 		return i;
 	}
 	public int getXPino() {
-		return x;
+		return c.getXCasa();
 	}
 	public int getYPino() {
-		return y;
+		return c.getYCasa();
+	}
+	public void pinoEntrouCasa() {
+		c.aumentaPinos();
+	}
+	public void pinoSaiuCasa() {
+		c.diminuiPinos();
+	}
+	public void pinoMudouCasa(Casa c) {
+		this.c=c;
+	}
+	public int quantidadePinos() {
+		return c.qtdPinos();
 	}
 }
