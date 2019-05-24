@@ -28,7 +28,7 @@ public class Menu extends JPanel {
   					//Rola os dois dados e guarda o resultado
   					d[0]=Dados.rolaDados();
   					d[1]=Dados.rolaDados();
-  					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+1);
+  					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
   					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
   					t.clicouNosDados(d[0],d[1]);
   				}
@@ -64,6 +64,7 @@ public class Menu extends JPanel {
 			} );
 		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
 		this.add(jogador3);
+
 		jogador3.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(3);

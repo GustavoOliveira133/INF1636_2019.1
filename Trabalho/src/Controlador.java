@@ -13,4 +13,9 @@ public class Controlador {
 	public int getVez() {
 		return vez;
 	}
+	public void acabouTurno() {
+		vez++;
+		if (vez>quantidadeJogadores)
+			vez=1;
+	}
 }

@@ -28,4 +28,7 @@ public class Casa {
 	public int qtdPinos() {
 		return numPinos;
 	}
+	public int getIDCasa() {
+		return id;
+	}
 }

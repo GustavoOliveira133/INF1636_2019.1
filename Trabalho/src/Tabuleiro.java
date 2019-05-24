@@ -89,6 +89,15 @@ public class Tabuleiro extends JPanel {
 	
 	public void clicouNosDados(int d1, int d2) {
 		//Pintar os dados no tabuleiro
+		int pinoDaVez=ctrl.getVez()-1;
+		pinos[pinoDaVez].pinoSaiuCasa();
+		int casaNova = pinos[pinoDaVez].getCasaPino() + d1 + d2 + 2;
+		if (casaNova > 35)
+			casaNova = casaNova - 35;
+		pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+		pinos[pinoDaVez].pinoEntrouCasa();
+		ctrl.acabouTurno();
+		
 		if(d1!=d2) {
 			d[d1].setFlag();
 			t.repaint();
@@ -141,22 +150,21 @@ public class Tabuleiro extends JPanel {
 			pinos[4]=new Pino("pin4.png",casas[0]);
 			pinos[4].pinoEntrouCasa();
 		}
-		/*
+		
 		else if(qtd==6) {
-			pinos[0]=new Pino("pin0.png",880,880);
+			pinos[0]=new Pino("pin0.png",casas[0]);
 			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",915,880);
+			pinos[1]=new Pino("pin1.png",casas[0]);
 			pinos[1].pinoEntrouCasa();
-			pinos[2]=new Pino("pin2.png",950,880);
+			pinos[2]=new Pino("pin2.png",casas[0]);
 			pinos[2].pinoEntrouCasa();
-			pinos[3]=new Pino("pin3.png",880,930);
+			pinos[3]=new Pino("pin3.png",casas[0]);
 			pinos[3].pinoEntrouCasa();
-			pinos[4]=new Pino("pin4.png",915,930);
+			pinos[4]=new Pino("pin4.png",casas[0]);
 			pinos[4].pinoEntrouCasa();
-			pinos[5]=new Pino("pin5.png",950,930);
+			pinos[5]=new Pino("pin5.png",casas[0]);
 			pinos[0].pinoEntrouCasa();
 		}
-		*/
 		repaint();
 	}
 	
