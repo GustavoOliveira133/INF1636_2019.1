@@ -11,10 +11,11 @@ public class Tabuleiro extends JPanel {
 	private Pino pinos[]=null;
     private int dados[]=new int[2];
     private Controlador ctrl;
-    private Casa casas[]=new Casa[37];
+    private Casa casas[]=new Casa[36];
 
 	
 	public Tabuleiro(Controlador ctrl) {
+		t.setBounds(0, 0, 1000, 1000);
 		this.ctrl=ctrl;
 		try {
 			tabuleiro=ImageIO.read(new File("tabuleiroRJ.jpg"));
@@ -34,7 +35,7 @@ public class Tabuleiro extends JPanel {
 		d[5]=new Dados("die_face_6.png");
 		
 		//Criando as casas
-		casas[0]=new Casa(880,880,1,0);
+		casas[0]=new Casa(880,870,1,0);
 		casas[1]=new Casa(790,900,0,1);
 		casas[2]=new Casa(700,900,0,2);
 		casas[3]=new Casa(610,900,0,3);
@@ -47,7 +48,7 @@ public class Tabuleiro extends JPanel {
 		casas[10]=new Casa(20,810,0,10);
 		casas[11]=new Casa(20,715,0,11);
 		casas[12]=new Casa(20,630,0,12);
-		casas[13]=new Casa(20,540,0,13);
+		casas[13]=new Casa(20,505,0,13);
 		casas[14]=new Casa(20,450,0,14);
 		casas[15]=new Casa(20,360,0,15);
 		casas[16]=new Casa(20,255,0,16);
@@ -177,6 +178,10 @@ public class Tabuleiro extends JPanel {
 		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
 		for(int i=0;i<ctrl.getJogadores();i++) {
 			gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
+			pinos[i].aumentaEntrou();
+		}
+		for(int i=0;i<ctrl.getJogadores();i++) {
+			pinos[i].zeraEntrou();
 		}
 		
 		int p=0; //valor para conferir se um dado nao-repetido ja foi pintado (sera usado mais adiante)

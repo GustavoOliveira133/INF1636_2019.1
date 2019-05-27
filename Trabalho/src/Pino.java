@@ -22,29 +22,29 @@ public class Pino {
 		return i;
 	}
 	public int getXPino() {
-		if (c.qtdPinos()==0)
+		if (c.getEntrou()==0)
 			return c.getXCasa();
-		else if(c.qtdPinos()==1)
+		else if(c.getEntrou()==1)
 			return (c.getXCasa()+35);
-		else if (c.qtdPinos()==2)
+		else if (c.getEntrou()==2)
 			return (c.getXCasa()+70);
-		else if (c.qtdPinos()==3)
+		else if (c.getEntrou()==3)
 			return c.getXCasa();
-		else if (c.qtdPinos()==4)
+		else if (c.getEntrou()==4)
 			return (c.getXCasa()+35);
 		else
 			return (c.getXCasa()+70);
 	}
 	public int getYPino() {
-		if (c.qtdPinos()==0)
+		if (c.getEntrou()==0)
 			return c.getYCasa();
-		else if(c.qtdPinos()==1)
+		else if(c.getEntrou()==1)
 			return c.getYCasa();
-		else if (c.qtdPinos()==2)
+		else if (c.getEntrou()==2)
 			return c.getYCasa();
-		else if (c.qtdPinos()==3)
+		else if (c.getEntrou()==3)
 			return (c.getYCasa()+35);
-		else if (c.qtdPinos()==4)
+		else if (c.getEntrou()==4)
 			return (c.getYCasa()+35);
 		else
 			return (c.getYCasa()+35);
@@ -63,5 +63,11 @@ public class Pino {
 	}
 	public int getCasaPino() {
 		return c.getIDCasa();
+	}
+	public void aumentaEntrou() {
+		c.entrouPino();
+	}
+	public void zeraEntrou() {
+		c.saiuPino();
 	}
 }

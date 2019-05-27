@@ -4,6 +4,7 @@ public class Casa {
 	private int y;
 	private int id;
 	private int numPinos=0;
+	private int qtdEntrou=0;
 	private int tipo;
 	
 	public Casa(int x, int y, int tipo, int id) {
@@ -30,5 +31,14 @@ public class Casa {
 	}
 	public int getIDCasa() {
 		return id;
+	}
+	public int getEntrou() {
+		return qtdEntrou;
+	}
+	public void entrouPino() {
+		qtdEntrou++;
+	}
+	public void saiuPino() {
+		qtdEntrou=0;
 	}
 }

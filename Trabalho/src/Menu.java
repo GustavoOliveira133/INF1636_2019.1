@@ -18,6 +18,7 @@ public class Menu extends JPanel {
 	
 	
 	public Menu(Controlador ctrl,Tabuleiro t) {
+		m.setBounds(1000, 0, 500, 500);
 		//Cria um ActionListener para o botao "rolar os dados"
 		dados.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) {
@@ -36,6 +37,15 @@ public class Menu extends JPanel {
 		} );
 		//muda a fonte e seu tamanho do JLabel (texto que fala que eh inicio do jogo)
 		inicio.setFont(new Font("Verdana",1,20));
+		//ajustando as posições dos componentes do menu
+		acoes.setBounds(10, 10, 500, 100);
+		inicio.setBounds(50,0, 500, 100);
+		jogador2.setBounds(50, 80,150, 40);
+		jogador3.setBounds(260, 80,150, 40);
+		jogador4.setBounds(50, 160,150, 40);
+		jogador5.setBounds(260, 160,150, 40);
+		jogador6.setBounds(150, 240,150, 40);
+		dados.setBounds(150,100,150,40);
 		//adiciona o JLabel no painel
 		m.add(inicio);
 		//adiciona o botao para escolher 2 jogadores
