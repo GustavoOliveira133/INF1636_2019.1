@@ -3,22 +3,40 @@ public class Casa {
 	private int x;
 	private int y;
 	private int id;
-	private int numPinos=0;
 	private int qtdEntrou=0;
+	private int valor;
+	private int dono=-1;
 	private int tipo;
+	/* Tipos de casa: 
+	 * 0 - Casa inicial
+	 * 1 - Terrenos
+	 * 2 - Empresa
+	 * 3 - Sorte/Reves
+	 * 4 - Eventos (pague x)
+	 * 5 - Eventos (receba x)
+	 * 6 - prisao (vá para bangu I)
+	 * 7 - bangu I
+	 */
 	
-	public Casa(int x, int y, int tipo, int id) {
+	public Casa(int x, int y, int tipo, int id, int preco) {
+		this.valor=preco;
 		this.id=id;
 		this.x=x;
 		this.y=y;
 		this.tipo=tipo;
 	}
 	
-	public void aumentaPinos() {
-		numPinos++;
+	public int getDono() {
+		return dono;
 	}
-	public void diminuiPinos() {
-		numPinos--;
+	public void mudaDono(int i) {
+		dono = i;
+	}
+	public int getValor() {
+		return valor;
+	}
+	public int getTipo() {
+		return tipo;
 	}
 	public int getXCasa() {
 		return x;
@@ -26,13 +44,10 @@ public class Casa {
 	public int getYCasa() {
 		return y;
 	}
-	public int qtdPinos() {
-		return numPinos;
-	}
 	public int getIDCasa() {
 		return id;
 	}
-	public int getEntrou() {
+	public int getQtdPinosEntrou() {
 		return qtdEntrou;
 	}
 	public void entrouPino() {

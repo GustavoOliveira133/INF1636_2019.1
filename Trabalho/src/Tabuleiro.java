@@ -8,8 +8,7 @@ public class Tabuleiro extends JPanel {
 	private Tabuleiro t=this;
 	private Image tabuleiro=null;
 	private Dados d[]=new Dados[6];
-	private Pino pinos[]=null;
-    private int dados[]=new int[2];
+	private Pino[] pinos;
     private Controlador ctrl;
     private Casa casas[]=new Casa[36];
 
@@ -34,43 +33,54 @@ public class Tabuleiro extends JPanel {
 		d[4]=new Dados("die_face_5.png");
 		d[5]=new Dados("die_face_6.png");
 		
-		//Criando as casas
-		casas[0]=new Casa(880,870,1,0);
-		casas[1]=new Casa(790,900,0,1);
-		casas[2]=new Casa(700,900,0,2);
-		casas[3]=new Casa(610,900,0,3);
-		casas[4]=new Casa(515,900,0,4);
-		casas[5]=new Casa(420,900,0,5);
-		casas[6]=new Casa(330,900,0,6);
-		casas[7]=new Casa(237,900,0,7);
-		casas[8]=new Casa(140,900,0,8);
-		casas[9]=new Casa(20,880,1,9);
-		casas[10]=new Casa(20,810,0,10);
-		casas[11]=new Casa(20,715,0,11);
-		casas[12]=new Casa(20,630,0,12);
-		casas[13]=new Casa(20,505,0,13);
-		casas[14]=new Casa(20,450,0,14);
-		casas[15]=new Casa(20,360,0,15);
-		casas[16]=new Casa(20,255,0,16);
-		casas[17]=new Casa(20,165,0,17);
-		casas[18]=new Casa(20,40,1,18);
-		casas[19]=new Casa(140,30,0,19);
-		casas[20]=new Casa(237,30,0,20);
-		casas[21]=new Casa(330,30,0,21);
-		casas[22]=new Casa(420,30,0,22);
-		casas[23]=new Casa(515,30,0,23);
-		casas[24]=new Casa(610,30,0,24);
-		casas[25]=new Casa(700,30,0,25);
-		casas[26]=new Casa(790,30,0,26);
-		casas[27]=new Casa(880,40,1,27);
-		casas[28]=new Casa(880,165,0,28);
-		casas[29]=new Casa(880,255,0,29);
-		casas[30]=new Casa(880,347,0,30);
-		casas[31]=new Casa(880,440,0,31);
-		casas[32]=new Casa(880,540,0,32);
-		casas[33]=new Casa(880,620,0,33);
-		casas[34]=new Casa(880,715,0,34);
-		casas[35]=new Casa(880,810,0,35);
+		//Criando as casas (passa o x,y,tipo da casa, seu id e valor
+		/* Tipos de casa: 
+		 * 0 - Casa inicial
+		 * 1 - Terrenos
+		 * 2 - Empresa
+		 * 3 - Sorte/Reves
+		 * 4 - Eventos (pague x)
+		 * 5 - Eventos (receba x)
+		 * 6 - prisao (vá para bangu I)
+		 * 7 - bangu I
+		 * 8 - casa cerveja/pagode
+		 */
+		casas[0]=new Casa(20,880,0,0,0);
+		casas[1]=new Casa(20,810,1,1,220);
+		casas[2]=new Casa(20,715,3,2,0);
+		casas[3]=new Casa(20,630,2,3,200);
+		casas[4]=new Casa(20,505,1,4,300);
+		casas[5]=new Casa(20,450,1,5,220);
+		casas[6]=new Casa(20,360,3,6,0);
+		casas[7]=new Casa(20,255,2,7,150);
+		casas[8]=new Casa(20,165,1,8,140);
+		casas[9]=new Casa(20,40,7,9,0);
+		casas[10]=new Casa(140,30,1,10,60);
+		casas[11]=new Casa(237,30,1,11,180);
+		casas[12]=new Casa(330,30,1,12,300);
+		casas[13]=new Casa(420,30,3,13,0);
+		casas[14]=new Casa(515,30,1,14,260);
+		casas[15]=new Casa(610,30,2,15,200);
+		casas[16]=new Casa(700,30,1,16,220);
+		casas[17]=new Casa(790,30,5,17,200);
+		casas[18]=new Casa(880,40,8,18,0);
+		casas[19]=new Casa(880,165,2,19,200);
+		casas[20]=new Casa(880,255,1,20,180);
+		casas[21]=new Casa(880,347,1,21,140);
+		casas[22]=new Casa(880,440,1,22,120);
+		casas[23]=new Casa(880,540,3,23,0);
+		casas[24]=new Casa(880,620,2,24,200);
+		casas[25]=new Casa(880,715,1,25,60);
+		casas[26]=new Casa(880,810,1,26,260);
+		casas[27]=new Casa(880,870,6,27,0);
+		casas[28]=new Casa(790,900,1,28,160);
+		casas[29]=new Casa(700,900,3,29,0);
+		casas[30]=new Casa(610,900,1,30,240);
+		casas[31]=new Casa(515,900,2,31,150);
+		casas[32]=new Casa(420,900,1,32,100);
+		casas[33]=new Casa(330,900,3,33,0);
+		casas[34]=new Casa(237,900,4,34,200);
+		casas[35]=new Casa(140,900,1,35,100);
 		
 		
 		addMouseListener(new MouseListener() {
@@ -91,13 +101,11 @@ public class Tabuleiro extends JPanel {
 	public void clicouNosDados(int d1, int d2) {
 		//Pintar os dados no tabuleiro
 		int pinoDaVez=ctrl.getVez()-1;
-		pinos[pinoDaVez].pinoSaiuCasa();
-		int casaNova = pinos[pinoDaVez].getCasaPino() + d1 + d2 + 2;
+		int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
 		if (casaNova > 35)
 			casaNova = casaNova - 35;
 		pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
-		pinos[pinoDaVez].pinoEntrouCasa();
-		
+
 		
 		if(d1!=d2) {
 			d[d1].setFlag();
@@ -115,56 +123,42 @@ public class Tabuleiro extends JPanel {
 		//Criar os pinos de acordo com a quantidade de jogadores selecionado e pinta-los no tabuleiro
 		int qtd=ctrl.getJogadores();
 		pinos=new Pino[qtd];
+		/* Pino 1 - 'V'
+		 * Pino 2 - 'A'
+		 * Pino 3 - 'L'
+		 * Pino 4 - 'M'
+		 * Pino 5 - 'R'
+		 * Pino 6 - 'C'	*/
 		if (qtd==2) {
-			pinos[0]=new Pino("pin0.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",casas[0]);
-			pinos[1].pinoEntrouCasa();
+			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
+			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
 		}
 		else if (qtd==3) {
-			pinos[0]=new Pino("pin0.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",casas[0]);
-			pinos[1].pinoEntrouCasa();
-			pinos[2]=new Pino("pin2.png",casas[0]);
-			pinos[2].pinoEntrouCasa();
+			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
+			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
+			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
 		}
 		else if(qtd==4) {
-			pinos[0]=new Pino("pin0.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",casas[0]);
-			pinos[1].pinoEntrouCasa();
-			pinos[2]=new Pino("pin2.png",casas[0]);
-			pinos[2].pinoEntrouCasa();
-			pinos[3]=new Pino("pin3.png",casas[0]);
-			pinos[3].pinoEntrouCasa();
+			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
+			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
+			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
+			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
 		}
 		else if(qtd==5) {
-			pinos[0]=new Pino("pin0.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",casas[0]);
-			pinos[1].pinoEntrouCasa();
-			pinos[2]=new Pino("pin2.png",casas[0]);
-			pinos[2].pinoEntrouCasa();
-			pinos[3]=new Pino("pin3.png",casas[0]);
-			pinos[3].pinoEntrouCasa();
-			pinos[4]=new Pino("pin4.png",casas[0]);
-			pinos[4].pinoEntrouCasa();
+			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
+			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
+			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
+			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
+			pinos[4]=new Pino("pin4.png",casas[0],'R',5);
 		}
 		
 		else if(qtd==6) {
-			pinos[0]=new Pino("pin0.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
-			pinos[1]=new Pino("pin1.png",casas[0]);
-			pinos[1].pinoEntrouCasa();
-			pinos[2]=new Pino("pin2.png",casas[0]);
-			pinos[2].pinoEntrouCasa();
-			pinos[3]=new Pino("pin3.png",casas[0]);
-			pinos[3].pinoEntrouCasa();
-			pinos[4]=new Pino("pin4.png",casas[0]);
-			pinos[4].pinoEntrouCasa();
-			pinos[5]=new Pino("pin5.png",casas[0]);
-			pinos[0].pinoEntrouCasa();
+			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
+			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
+			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
+			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
+			pinos[4]=new Pino("pin4.png",casas[0],'R',5);
+			pinos[5]=new Pino("pin5.png",casas[0],'C',6);
 		}
 		repaint();
 	}
@@ -208,5 +202,8 @@ public class Tabuleiro extends JPanel {
 				
 			}
 		}
+	}
+	public Pino getPinoDaVez() {
+		return pinos[ctrl.getVez()-1];
 	}
 }

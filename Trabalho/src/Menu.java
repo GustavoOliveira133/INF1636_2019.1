@@ -15,12 +15,32 @@ public class Menu extends JPanel {
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
 	JLabel info;
-	JButton terreno = new JButton("Comprar terreno");
+	JButton terreno = new JButton("Comprar propriedade");
 	private int d[]=new int [2];
 	
 	
 	public Menu(Controlador ctrl,Tabuleiro t) {
 		m.setBounds(1000, 0, 500, 1000);
+		//Cria um ActionListener para o botao "comprar terreno"
+		terreno.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				  Object[] options = { "Confirmar", "Cancelar" };
+					int opcao = JOptionPane.showOptionDialog(t, "Deseja comprar esta propriedade?", "Confirmar compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+					if(opcao==0) {
+						Pino p = t.getPinoDaVez();
+						if ((p.getCasaPino().getValor()) - (p.getCasaPino().getValor()) < 0) {
+							JOptionPane.showMessageDialog(m,"Saldo insuficiente");
+						}
+						else {
+							p.tiraSaldo(p.getCasaPino().getValor());
+							p.getCasaPino().mudaDono(p.getPinoId());
+							String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
+			     			JOptionPane.showMessageDialog(m,msg);
+							terreno.setEnabled(false);
+						}
+					}
+			  }
+		} );
 		
 		//Cria um ActionListener para o botao "passar o turno"
 		turno.addActionListener(new ActionListener() { 
@@ -31,7 +51,7 @@ public class Menu extends JPanel {
 				if(opcao==0) {
 					//Encerra o turno
 					ctrl.acabouTurno();
-					m.atualizaBotoes(ctrl);
+					m.atualizaBotoes(ctrl,t);
 					dados.setEnabled(true);
 				}
 			  }
@@ -49,7 +69,7 @@ public class Menu extends JPanel {
   					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
   					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
   					t.clicouNosDados(d[0],d[1]);
-  					m.atualizaBotoes(ctrl);
+  					m.atualizaBotoes(ctrl,t);
   					dados.setEnabled(false);
   				}
 			  }
@@ -73,7 +93,7 @@ public class Menu extends JPanel {
 				  //guarda em ctrl a quantidade de jogadores
 				  ctrl.setJogadores(2);
 				  t.criaPinos();
-				  m.atualizaBotoes(ctrl);
+				  m.atualizaBotoes(ctrl,t);
 			  } 
 			} );
 		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
@@ -83,7 +103,7 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(3);
 				  t.criaPinos();
-				  m.atualizaBotoes(ctrl);
+				  m.atualizaBotoes(ctrl,t);
 			  } 
 			} );
 		
@@ -93,7 +113,7 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(4);
 				  t.criaPinos();
-				  m.atualizaBotoes(ctrl);
+				  m.atualizaBotoes(ctrl,t);
 			  } 
 			} );
 		
@@ -103,7 +123,7 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(5);
 				  t.criaPinos();
-				  m.atualizaBotoes(ctrl);
+				  m.atualizaBotoes(ctrl,t);
 			  } 
 			} );
 		
@@ -112,7 +132,7 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(6);
 				  t.criaPinos();
-				  m.atualizaBotoes(ctrl);
+				  m.atualizaBotoes(ctrl,t);
 			  } 
 			} );
 		
@@ -135,12 +155,13 @@ public class Menu extends JPanel {
 		
 	}
 	
-	public void atualizaBotoes(Controlador ctrl) {
+	public void atualizaBotoes(Controlador ctrl, Tabuleiro t) {
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
-		
-		String msg=String.format("Turno do jogador %d",ctrl.getVez());
+
+		String msg = stringDaVez(ctrl.getVez()); 
+		Pino p = t.getPinoDaVez();
 		info=new JLabel(msg);
 		acoes.setBounds(20, 20, 300, 20);
 		info.setBounds(20,800, 240, 21);
@@ -153,7 +174,34 @@ public class Menu extends JPanel {
 		this.add(acoes);
 		this.add(dados);
 		this.add(turno);
+		//Verifica se o botao de comprar terreno esta habilitado ou nao
+		terreno.setEnabled(false);
+		System.out.printf("Pino da vez: %d, casa: %d, tipo casa: %d, dono casa: %d\n",ctrl.getVez(), p.getCasaPino().getIDCasa(),p.getCasaPino().getTipo(),p.getCasaPino().getDono());
+		if ((p.getCasaPino().getTipo()==1 && p.getCasaPino().getDono() == -1) || (p.getCasaPino().getTipo()==2 && p.getCasaPino().getDono() == -1)) {
+			terreno.setEnabled(true);
+		}
 		this.add(terreno);
 	}
 	
+	
+	public String stringDaVez (int vez) {
+		if (vez == 1) {
+			return "Turno do jogador 1 (Vermelho)";
+		}
+		else if (vez == 2) {
+			return "Turno do jogador 2 (Azul)";
+		}
+		else if (vez == 3) {
+			return "Turno do jogador 3 (Laranja)";
+		}
+		else if (vez == 4) {
+			return "Turno do jogador 4 (Amarelo)";
+		}
+		else if (vez == 5) {
+			return "Turno do jogador 5 (Roxo)";
+		}
+		else {
+			return "Turno do jogador 6 (Cinza)";
+		}
+	}
 }
