@@ -97,7 +97,7 @@ public class Tabuleiro extends JPanel {
 			casaNova = casaNova - 35;
 		pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
 		pinos[pinoDaVez].pinoEntrouCasa();
-		ctrl.acabouTurno();
+		
 		
 		if(d1!=d2) {
 			d[d1].setFlag();

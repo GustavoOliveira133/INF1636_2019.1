@@ -11,14 +11,31 @@ public class Menu extends JPanel {
 	private JButton jogador5=new JButton("5 jogadores");
 	private JButton jogador6=new JButton("6 jogadores");
 	private JButton dados=new JButton("Rolar os dados");
+	private JButton turno=new JButton("Passar o turno");
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
-	JLabel info=null;
+	JLabel info;
+	JButton terreno = new JButton("Comprar terreno");
 	private int d[]=new int [2];
 	
 	
 	public Menu(Controlador ctrl,Tabuleiro t) {
-		m.setBounds(1000, 0, 500, 500);
+		m.setBounds(1000, 0, 500, 1000);
+		
+		//Cria um ActionListener para o botao "passar o turno"
+		turno.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				//Janela de dalogo para confirmar se encerrar o turno
+				Object[] options = { "Confirmar", "Cancelar" };
+				int opcao = JOptionPane.showOptionDialog(t, "Deseja encerrar o turno?", "Confirmar fim do turno", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				if(opcao==0) {
+					//Encerra o turno
+					ctrl.acabouTurno();
+					m.atualizaBotoes(ctrl);
+					dados.setEnabled(true);
+				}
+			  }
+		} );
 		//Cria um ActionListener para o botao "rolar os dados"
 		dados.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) {
@@ -32,20 +49,20 @@ public class Menu extends JPanel {
   					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
   					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
   					t.clicouNosDados(d[0],d[1]);
+  					m.atualizaBotoes(ctrl);
+  					dados.setEnabled(false);
   				}
 			  }
 		} );
 		//muda a fonte e seu tamanho do JLabel (texto que fala que eh inicio do jogo)
 		inicio.setFont(new Font("Verdana",1,20));
+		inicio.setBounds(30, 0, 400, 100);
 		//ajustando as posições dos componentes do menu
-		acoes.setBounds(10, 10, 500, 100);
-		inicio.setBounds(50,0, 500, 100);
 		jogador2.setBounds(50, 80,150, 40);
 		jogador3.setBounds(260, 80,150, 40);
 		jogador4.setBounds(50, 160,150, 40);
 		jogador5.setBounds(260, 160,150, 40);
 		jogador6.setBounds(150, 240,150, 40);
-		dados.setBounds(150,100,150,40);
 		//adiciona o JLabel no painel
 		m.add(inicio);
 		//adiciona o botao para escolher 2 jogadores
@@ -55,21 +72,8 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) {
 				  //guarda em ctrl a quantidade de jogadores
 				  ctrl.setJogadores(2);
-				  //retira todos os botoes de selecao de quantidade de jogadores
-				  m.removeAll();
-				  m.revalidate();
-				  m.repaint();
-				  //chama o metodo na classe Tabuleiro que cria os pinos de acordo com a quantidade de jogadores e os coloca no tabuleiro
 				  t.criaPinos();
-				  /* Vai criar o JLabel que informa o turno do jogador e outra que informa as acoes disponiveis
-				   adiciona o botao de rolar os dados */
-				  String msg=String.format("Turno do jogador %d",ctrl.getVez());
-				  info=new JLabel(msg);
-				  info.setFont(new Font("Verdana",1,20));
-				  acoes.setFont(new Font("Verdana",1,20));
-				  m.add(info);
-				  m.add(acoes);
-				  m.add(dados);
+				  m.atualizaBotoes(ctrl);
 			  } 
 			} );
 		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
@@ -78,17 +82,8 @@ public class Menu extends JPanel {
 		jogador3.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(3);
-				  m.removeAll();
-				  m.revalidate();
-				  m.repaint();
 				  t.criaPinos();
-				  String msg=String.format("Turno do jogador %d",ctrl.getVez());
-				  info=new JLabel(msg);
-				  info.setFont(new Font("Verdana",1,20));
-				  acoes.setFont(new Font("Verdana",1,20));
-				  m.add(info);
-				  m.add(acoes);
-				  m.add(dados);
+				  m.atualizaBotoes(ctrl);
 			  } 
 			} );
 		
@@ -97,17 +92,8 @@ public class Menu extends JPanel {
 		jogador4.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(4);
-				  m.removeAll();
-				  m.revalidate();
-				  m.repaint();
 				  t.criaPinos();
-				  String msg=String.format("Turno do jogador %d",ctrl.getVez());
-				  info=new JLabel(msg);
-				  info.setFont(new Font("Verdana",1,20));
-				  acoes.setFont(new Font("Verdana",1,20));
-				  m.add(info);
-				  m.add(acoes);
-				  m.add(dados);
+				  m.atualizaBotoes(ctrl);
 			  } 
 			} );
 		
@@ -116,17 +102,8 @@ public class Menu extends JPanel {
 		jogador5.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(5);
-				  m.removeAll();
-				  m.revalidate();
-				  m.repaint();
 				  t.criaPinos();
-				  String msg=String.format("Turno do jogador %d",ctrl.getVez());
-				  info=new JLabel(msg);
-				  info.setFont(new Font("Verdana",1,20));
-				  acoes.setFont(new Font("Verdana",1,20));
-				  m.add(info);
-				  m.add(acoes);
-				  m.add(dados);
+				  m.atualizaBotoes(ctrl);
 			  } 
 			} );
 		
@@ -134,17 +111,8 @@ public class Menu extends JPanel {
 		jogador6.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(6);
-				  m.removeAll();
-				  m.revalidate();
-				  m.repaint();
 				  t.criaPinos();
-				  String msg=String.format("Turno do jogador %d",ctrl.getVez());
-				  info=new JLabel(msg);
-				  info.setFont(new Font("Verdana",1,20));
-				  acoes.setFont(new Font("Verdana",1,20));
-				  m.add(info);
-				  m.add(acoes);
-				  m.add(dados);
+				  m.atualizaBotoes(ctrl);
 			  } 
 			} );
 		
@@ -166,5 +134,26 @@ public class Menu extends JPanel {
     	});
 		
 	}
+	
+	public void atualizaBotoes(Controlador ctrl) {
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
+		
+		String msg=String.format("Turno do jogador %d",ctrl.getVez());
+		info=new JLabel(msg);
+		acoes.setBounds(20, 20, 300, 20);
+		info.setBounds(20,800, 240, 21);
+		dados.setBounds(150,100,150,40);
+		turno.setBounds(150, 200, 150, 40);
+		terreno.setBounds(150,300,150,40);
 
+
+		this.add(info);
+		this.add(acoes);
+		this.add(dados);
+		this.add(turno);
+		this.add(terreno);
+	}
+	
 }
