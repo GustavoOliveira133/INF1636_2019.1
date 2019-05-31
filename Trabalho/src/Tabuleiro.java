@@ -11,7 +11,6 @@ public class Tabuleiro extends JPanel {
 	private Pino[] pinos;
     private Controlador ctrl;
     private Casa casas[]=new Casa[36];
-
 	
 	public Tabuleiro(Controlador ctrl) {
 		t.setBounds(0, 0, 1000, 1000);
@@ -101,22 +100,51 @@ public class Tabuleiro extends JPanel {
 	public void clicouNosDados(int d1, int d2) {
 		//Pintar os dados no tabuleiro
 		int pinoDaVez=ctrl.getVez()-1;
-		int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-		if (casaNova > 35)
-			casaNova = casaNova - 35;
-		pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
-
 		
-		if(d1!=d2) {
-			d[d1].setFlag();
-			t.repaint();
-			d[d2].setFlag();
+		//Pino na prisao, verifica se foi para prisao pela casa "va para prisao" e verifica se pode sair
+		if ((pinos[pinoDaVez].getCasaPino().getTipo()==7) && (pinos[pinoDaVez].getPrisao()==true)) {
+			if (d1 != d2 ) { /* && n tem a carta saida livre da prisao */
+				d[d1].setFlag();
+				d[d2].setFlag();
+				repaint();
+			}
+			else { //pino anda normalmente
+				int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
+				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+				pinos[pinoDaVez].mudaFoiParaPrisao();
+				d[d1].setFlag();
+				d[d1].setRepetido();
+				repaint();
+			}
 		}
 		else {
-			d[d1].setFlag();
-			d[d1].setRepetido();
+			int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
+			
+			if (casaNova > 35) {
+				casaNova = casaNova - 35;
+				pinos[pinoDaVez].aumentaSaldo(200); //passou pela casa inicial
+			}
+			if (casaNova == 27) { //casa nova = va para prisao
+				JOptionPane.showMessageDialog(t,"Voce foi para a prisao");
+				pinos[pinoDaVez].pinoMudouCasa(casas[9]); //pino vai pra bangu 1
+				pinos[pinoDaVez].mudaFoiParaPrisao(); //indica que foi para prisao pela casa "va para prisao"
+			}
+			else {
+				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+			}
+		
+			if(d1!=d2) {
+				d[d1].setFlag();
+				t.repaint();
+				d[d2].setFlag();
+			}
+			else {
+				d[d1].setFlag();
+				d[d1].setRepetido();
+			}
+			repaint();
 		}
-		repaint();
+		
 	}
 	
 	public void criaPinos() {
@@ -130,35 +158,35 @@ public class Tabuleiro extends JPanel {
 		 * Pino 5 - 'R'
 		 * Pino 6 - 'C'	*/
 		if (qtd==2) {
-			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
-			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
+			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
+			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
 		}
 		else if (qtd==3) {
-			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
-			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
-			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
+			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
+			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
+			pinos[2]=new Pino("pin2.png",casas[0],"Laranja",3);
 		}
 		else if(qtd==4) {
-			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
-			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
-			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
-			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
+			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
+			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
+			pinos[2]=new Pino("pin2.png",casas[0],"Laranja",3);
+			pinos[3]=new Pino("pin3.png",casas[0],"Amarelo",4);
 		}
 		else if(qtd==5) {
-			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
-			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
-			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
-			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
-			pinos[4]=new Pino("pin4.png",casas[0],'R',5);
+			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
+			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
+			pinos[2]=new Pino("pin2.png",casas[0],"Laranja",3);
+			pinos[3]=new Pino("pin3.png",casas[0],"Amarelo",4);
+			pinos[4]=new Pino("pin4.png",casas[0],"Roxo",5);
 		}
 		
 		else if(qtd==6) {
-			pinos[0]=new Pino("pin0.png",casas[0],'V',1);
-			pinos[1]=new Pino("pin1.png",casas[0],'A',2);
-			pinos[2]=new Pino("pin2.png",casas[0],'L',3);
-			pinos[3]=new Pino("pin3.png",casas[0],'M',4);
-			pinos[4]=new Pino("pin4.png",casas[0],'R',5);
-			pinos[5]=new Pino("pin5.png",casas[0],'C',6);
+			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
+			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
+			pinos[2]=new Pino("pin2.png",casas[0],"Laranja",3);
+			pinos[3]=new Pino("pin3.png",casas[0],"Amarelo",4);
+			pinos[4]=new Pino("pin4.png",casas[0],"Roxo",5);
+			pinos[5]=new Pino("pin5.png",casas[0],"Cinza",6);
 		}
 		repaint();
 	}
@@ -171,13 +199,81 @@ public class Tabuleiro extends JPanel {
 		
 		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
 		for(int i=0;i<ctrl.getJogadores();i++) {
-			gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
+			if (ctrl.getVez()==(i+1)) {
+				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
+				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino()-3,pinos[i].getYPino(),30,40,null);
+			}
+			else {
+				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
+			}
 			pinos[i].aumentaEntrou();
 		}
 		for(int i=0;i<ctrl.getJogadores();i++) {
 			pinos[i].zeraEntrou();
 		}
 		
+		//pinta o turno de qual jogador e sua cor
+		if (ctrl.getVez()!=-1) {
+			String turno = String.format("Turno do jogador 1 (%s)", pinos[ctrl.getVez()-1].getCor());
+			if (ctrl.getVez() == 1) {
+				gd2.setColor(Color.red);
+			}
+			else if (ctrl.getVez() == 2) {
+				gd2.setColor(Color.blue);
+			}
+			else if (ctrl.getVez() == 3) {
+				gd2.setColor(Color.orange);
+			}
+			else if (ctrl.getVez() == 4) {
+				gd2.setColor(Color.yellow);
+			}
+			else if (ctrl.getVez() == 5) {
+				gd2.setColor(Color.MAGENTA);
+			}
+			else {
+				gd2.setColor(Color.gray);
+			}
+			gd2.drawString(turno, 200, 200);
+			
+			// pinta o saldo do jogador
+			String saldo = String.format("Saldo do jogador: %d", pinos[ctrl.getVez()-1].getSaldo());
+			gd2.setColor(Color.black);
+			gd2.drawString(saldo, 200, 250);
+			
+			//pinta informacoes da casa atual
+			if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==1 || pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em um terreno ou empresa
+				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //a empresa/terreno nao tem dono
+					String valorCasaAtual = String.format("Para compra-la é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
+					gd2.drawString("A propriedade atual nao tem dono", 200, 300);
+					gd2.drawString(valorCasaAtual, 200, 350);
+				}
+				else {
+					String casaAtual = String.format("A propriedade atual pertence ao jogador %d (%s) e tem %d casas e %d hoteis",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor(), pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas(),pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
+					gd2.drawString(casaAtual, 200, 300);
+				}
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==true) { //informa que o pino esta preso
+				gd2.drawString("O pino esta na prisao, saia com 2 numeros iguais nos dados", 200, 300);
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==false) { //informa que o pino esta na prisao mas nao esta preso
+				gd2.drawString("O pino esta na prisao, mas nao esta preso", 200, 300);
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==3) { //informa que o pino esta na casa de sorte/reves
+				gd2.drawString("O pino esta na casa das cartas sorte/reves", 200, 300);
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==0) { //informa que o pino esta na casa de inicio
+				gd2.drawString("O pino esta na casa de inicio", 200, 300);
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==8) { //informa q o pino esta na casa especial
+				gd2.drawString("O pino esta na casa de cerveja e pagode!", 200, 300);
+			}
+			else { //informa q o pino esta na casa de eventos
+				gd2.drawString("O pino esta na casa de eventos", 200, 300);
+			}
+			
+			
+		}
+
 		int p=0; //valor para conferir se um dado nao-repetido ja foi pintado (sera usado mais adiante)
 		/*Percorre o vetor de dados e verifica quais tem a flag == true (ou seja, tem que ser pintado).
 		Depois de pintado a flag volta a ser false. Verifica tambem se o valor rolado nos dados eh repetido*/

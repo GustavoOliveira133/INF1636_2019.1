@@ -1,5 +1,7 @@
 
 public class Casa {
+	private int qtdCasas = 0;
+	private int qtdHoteis = 0;
 	private int x;
 	private int y;
 	private int id;
@@ -16,6 +18,7 @@ public class Casa {
 	 * 5 - Eventos (receba x)
 	 * 6 - prisao (vá para bangu I)
 	 * 7 - bangu I
+	 * 8 - casa cerveja/pagode
 	 */
 	
 	public Casa(int x, int y, int tipo, int id, int preco) {
@@ -55,5 +58,11 @@ public class Casa {
 	}
 	public void saiuPino() {
 		qtdEntrou=0;
+	}
+	public int getQtdCasas() {
+		return qtdCasas;
+	}
+	public int getQtdHoteis() {
+		return qtdHoteis;
 	}
 }

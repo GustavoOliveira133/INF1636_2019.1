@@ -1,10 +1,11 @@
 
 public class Controlador {
 	private int quantidadeJogadores;
-	private int vez=1;
+	private int vez=-1;
 	
 	
 	public void setJogadores(int j) {
+		vez = 1;
 		quantidadeJogadores=j;
 	}
 	public int getJogadores() {

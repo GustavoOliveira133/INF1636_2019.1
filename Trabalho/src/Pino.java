@@ -11,13 +11,14 @@ public class Pino {
 	 * Pino 4 - 'M'
 	 * Pino 5 - 'R'
 	 * Pino 6 - 'C'	*/
-	private char cor; 
+	private String cor; 
 	private int id;
 	private int saldo = 2458;
 	private Image i=null;
 	private Casa c;
+	private boolean foiParaPrisao = false;
 	
-	public Pino(String s,Casa c, char cor,int id) {
+	public Pino(String s,Casa c, String cor,int id) {
 		this.id = id;
 		this.cor = cor;
 		this.c=c;
@@ -87,5 +88,17 @@ public class Pino {
 	}
 	public int getPinoId() {
 		return id;
+	}
+	public void mudaFoiParaPrisao () {
+		if (foiParaPrisao == true)
+			foiParaPrisao = false;
+		else
+			foiParaPrisao = true;
+	}
+	public boolean getPrisao () {
+		return foiParaPrisao;
+	}
+	public String getCor() {
+		return cor;
 	}
 }

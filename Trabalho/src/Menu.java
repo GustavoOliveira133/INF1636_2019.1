@@ -37,6 +37,7 @@ public class Menu extends JPanel {
 							String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
 			     			JOptionPane.showMessageDialog(m,msg);
 							terreno.setEnabled(false);
+							t.repaint();
 						}
 					}
 			  }
@@ -53,6 +54,7 @@ public class Menu extends JPanel {
 					ctrl.acabouTurno();
 					m.atualizaBotoes(ctrl,t);
 					dados.setEnabled(true);
+					t.repaint();
 				}
 			  }
 		} );
