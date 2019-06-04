@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Random;
+
 import javax.imageio.*;
 
 public class Tabuleiro extends JPanel {
@@ -11,6 +13,8 @@ public class Tabuleiro extends JPanel {
 	private Pino[] pinos;
     private Controlador ctrl;
     private Casa casas[]=new Casa[36];
+    private SorteReves cartasSR[] = new SorteReves[31];
+    private static Random aleatorio =new Random();
 	
 	public Tabuleiro(Controlador ctrl) {
 		t.setBounds(0, 0, 1000, 1000);
@@ -22,6 +26,41 @@ public class Tabuleiro extends JPanel {
 			System.out.println(e.getMessage());
 			System.exit(1);
 		}
+		
+		//Criando as cartas de sorte/reves
+		//sorte
+		cartasSR[0]=new SorteReves("chance1.png",0,25);
+		cartasSR[1]=new SorteReves("sorte01.jpg",0,150);
+		cartasSR[2]=new SorteReves("sorte02.jpg",0,100);
+		cartasSR[3]=new SorteReves("sorte03.jpg",3,-1);
+		cartasSR[4]=new SorteReves("sorte04.jpg",0,80);
+		cartasSR[5]=new SorteReves("sorte05.jpg",0,100);
+		cartasSR[6]=new SorteReves("sorte06.jpg",2,50);
+		cartasSR[7]=new SorteReves("sorte07.jpg",0,50);
+		cartasSR[8]=new SorteReves("sorte08.jpg",0,20);
+		cartasSR[9]=new SorteReves("sorte09.jpg",0,25);
+		cartasSR[10]=new SorteReves("sorte10.jpg",4,200);
+		cartasSR[11]=new SorteReves("sorte11.jpg",0,100);
+		cartasSR[12]=new SorteReves("sorte12.jpg",0,100);
+		cartasSR[13]=new SorteReves("sorte13.jpg",0,45);
+		cartasSR[14]=new SorteReves("sorte14.jpg",0,50);
+		cartasSR[15]=new SorteReves("sorte15.jpg",0,200);
+		//reves
+		cartasSR[16]=new SorteReves("reves01.jpg",1,25);
+		cartasSR[17]=new SorteReves("reves02.jpg",1,45);
+		cartasSR[18]=new SorteReves("reves03.jpg",1,45);
+		cartasSR[19]=new SorteReves("reves04.jpg",1,30);
+		cartasSR[20]=new SorteReves("reves05.jpg",1,40);
+		cartasSR[21]=new SorteReves("reves06.jpg",1,50);
+		cartasSR[22]=new SorteReves("reves07.jpg",1,100);
+		cartasSR[23]=new SorteReves("reves08.jpg",1,50);
+		cartasSR[24]=new SorteReves("reves09.jpg",1,30);
+		cartasSR[25]=new SorteReves("reves10.jpg",1,30);
+		cartasSR[26]=new SorteReves("reves11.jpg",1,25);
+		cartasSR[27]=new SorteReves("reves12.jpg",5,-1);
+		cartasSR[28]=new SorteReves("reves13.jpg",1,100);
+		cartasSR[29]=new SorteReves("reves14.jpg",1,50);
+		cartasSR[30]=new SorteReves("reves15.jpg",1,15);
 		
 		
 		//Criando os dados
@@ -44,6 +83,7 @@ public class Tabuleiro extends JPanel {
 		 * 7 - bangu I
 		 * 8 - casa cerveja/pagode
 		 */
+		//Construtor (x,y,tipo,idCasa,Preco,aluguel)
 		casas[0]=new Casa(20,880,0,0,0);
 		casas[1]=new Casa(20,810,1,1,220);
 		casas[2]=new Casa(20,715,3,2,0);
@@ -80,7 +120,13 @@ public class Tabuleiro extends JPanel {
 		casas[33]=new Casa(330,900,3,33,0);
 		casas[34]=new Casa(237,900,4,34,200);
 		casas[35]=new Casa(140,900,1,35,100);
-		
+		//Coloca multi nas empresas
+		casas[3].setMulti(50);
+		casas[7].setMulti(40);
+		casas[15].setMulti(50);
+		casas[19].setMulti(50);
+		casas[24].setMulti(50);
+		casas[31].setMulti(40);
 		
 		addMouseListener(new MouseListener() {
     		public void mouseEntered(MouseEvent e) {}
@@ -117,21 +163,78 @@ public class Tabuleiro extends JPanel {
 				repaint();
 			}
 		}
-		else {
+		else { //pino andou
 			int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-			
+
 			if (casaNova > 35) {
-				casaNova = casaNova - 35;
+				int casaNova2 = casaNova - 35;
 				pinos[pinoDaVez].aumentaSaldo(200); //passou pela casa inicial
+				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova2]);
 			}
+			else if (casaNova <= 35 && casaNova!=27){
+				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+			}
+			
 			if (casaNova == 27) { //casa nova = va para prisao
 				JOptionPane.showMessageDialog(t,"Voce foi para a prisao");
 				pinos[pinoDaVez].pinoMudouCasa(casas[9]); //pino vai pra bangu 1
 				pinos[pinoDaVez].mudaFoiParaPrisao(); //indica que foi para prisao pela casa "va para prisao"
 			}
-			else {
-				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+
+			if (pinos[pinoDaVez].getCasaPino().getTipo()==3) { //pino foi para casa de sorte/reves
+				int carta = Tabuleiro.sorteiaCarta();
+				cartasSR[carta].setFoiTirada();
+				if (cartasSR[carta].getTipo() == 0) { //carta sorte
+					int valorModificar = cartasSR[carta].valorModificarSaldo();
+					pinos[pinoDaVez].aumentaSaldo(valorModificar);
+					String msg=String.format("Você teve sorte e recebeu: R$%d",valorModificar);
+	     			JOptionPane.showMessageDialog(t,msg);
+				}
+				else if (cartasSR[carta].getTipo() == 1) { //carta reves
+					int valorModificar = cartasSR[carta].valorModificarSaldo();
+					pinos[pinoDaVez].tiraSaldo(valorModificar);
+					String msg=String.format("Você teve azar e perdeu: R$%d",valorModificar);
+	     			JOptionPane.showMessageDialog(t,msg);
+				}
+				else if (cartasSR[carta].getTipo() == 2) { //carta sorte receba de cada um
+					int valorModificar = (ctrl.getJogadores()-1) * 50; //50 de cada outro jogador
+					pinos[pinoDaVez].aumentaSaldo(valorModificar);
+					for (int i=0;i<ctrl.getJogadores();i++) {
+						if (i!=pinoDaVez) {
+							pinos[i].tiraSaldo(50);
+						}							
+					}
+					String msg=String.format("Você teve sorte e recebeu: R$%d, todos os outros jogadores perderam R$50",valorModificar);
+	     			JOptionPane.showMessageDialog(t,msg);
+				}
+				else if (cartasSR[carta].getTipo() == 3) { //carta saida livre da prisao
+					pinos[pinoDaVez].recebeCartaPrisao();
+	     			JOptionPane.showMessageDialog(t,"Você recebeu a carta passe livre da prisão!");
+				}
+				else if (cartasSR[carta].getTipo() == 4) { //carta vai para o ponto de partida
+					pinos[pinoDaVez].pinoMudouCasa(casas[0]);
+					pinos[pinoDaVez].aumentaSaldo(200);
+	     			JOptionPane.showMessageDialog(t,"Você foi para o ponto de partida e recebeu $200!");
+				}
+				else if (cartasSR[carta].getTipo() == 5) { //carta vai para a prisao
+					pinos[pinoDaVez].pinoMudouCasa(casas[9]); //pino vai pra bangu 1
+					pinos[pinoDaVez].mudaFoiParaPrisao(); //indica que foi para prisao pela casa "va para prisao"
+	     			JOptionPane.showMessageDialog(t,"Você foi para a prisão!!");
+				}
 			}
+			/*
+			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para terreno de outro dono (pagamento)
+				
+			}*/
+			
+			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para empresa de outras pessoa (pagamento)
+				int valorPagar = casas[casaNova].getMulti() * (d1+d2+2);
+				pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
+				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valorPagar);
+				String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valorPagar,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
+     			JOptionPane.showMessageDialog(t,msg);
+			}
+		}
 		
 			if(d1!=d2) {
 				d[d1].setFlag();
@@ -145,7 +248,7 @@ public class Tabuleiro extends JPanel {
 			repaint();
 		}
 		
-	}
+	
 	
 	public void criaPinos() {
 		//Criar os pinos de acordo com a quantidade de jogadores selecionado e pinta-los no tabuleiro
@@ -212,6 +315,16 @@ public class Tabuleiro extends JPanel {
 			pinos[i].zeraEntrou();
 		}
 		
+		//Pinta a carta de sorte ou reves tirada
+		int marca=0;
+		for (int i=0;i<31;i++) {
+			if (cartasSR[i].getFoiTirada()==true) {
+				marca = i; //marca para retirá-la depois de pintar
+				gd2.drawImage(cartasSR[i].getImage(),610,180,null);
+			}
+		}
+		cartasSR[marca].unsetFoiTirada();
+		
 		//pinta o turno de qual jogador e sua cor
 		if (ctrl.getVez()!=-1) {
 			String turno = String.format("Turno do jogador 1 (%s)", pinos[ctrl.getVez()-1].getCor());
@@ -241,34 +354,45 @@ public class Tabuleiro extends JPanel {
 			gd2.drawString(saldo, 200, 250);
 			
 			//pinta informacoes da casa atual
-			if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==1 || pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em um terreno ou empresa
-				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //a empresa/terreno nao tem dono
-					String valorCasaAtual = String.format("Para compra-la é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
-					gd2.drawString("A propriedade atual nao tem dono", 200, 300);
+			if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==1) { //informa o pino que esta em um terreno
+				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //terreno nao tem dono
+					String valorCasaAtual = String.format("Para comprá-lo é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
+					gd2.drawString("Este terreno não tem dono", 200, 300);
 					gd2.drawString(valorCasaAtual, 200, 350);
 				}
 				else {
-					String casaAtual = String.format("A propriedade atual pertence ao jogador %d (%s) e tem %d casas e %d hoteis",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor(), pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas(),pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
+					String casaAtual = String.format("Este terreno pertence ao jogador %d (%s) e tem %d casas e %d hotéis",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor(), pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas(),pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
+					gd2.drawString(casaAtual, 200, 300);
+				}
+			}
+			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em uma empresa
+				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //a empresa nao tem dono
+					String valorCasaAtual = String.format("Para comprá-la é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
+					gd2.drawString("Esta empresa não tem dono", 200, 300);
+					gd2.drawString(valorCasaAtual, 200, 350);
+				}
+				else {
+					String casaAtual = String.format("Esta empresa pertence ao jogador %d (%s) e tem %d casas e %d hotéis",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor(), pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas(),pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
 					gd2.drawString(casaAtual, 200, 300);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==true) { //informa que o pino esta preso
-				gd2.drawString("O pino esta na prisao, saia com 2 numeros iguais nos dados", 200, 300);
+				gd2.drawString("O pino está na prisao, saia com 2 números iguais nos dados", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==false) { //informa que o pino esta na prisao mas nao esta preso
-				gd2.drawString("O pino esta na prisao, mas nao esta preso", 200, 300);
+				gd2.drawString("O pino está na prisao, mas nãoo está preso", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==3) { //informa que o pino esta na casa de sorte/reves
-				gd2.drawString("O pino esta na casa das cartas sorte/reves", 200, 300);
+				gd2.drawString("O pino está na casa das cartas sorte/revés", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==0) { //informa que o pino esta na casa de inicio
-				gd2.drawString("O pino esta na casa de inicio", 200, 300);
+				gd2.drawString("O pino está na casa de início", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==8) { //informa q o pino esta na casa especial
-				gd2.drawString("O pino esta na casa de cerveja e pagode!", 200, 300);
+				gd2.drawString("O pino está na casa de cerveja e pagode!", 200, 300);
 			}
 			else { //informa q o pino esta na casa de eventos
-				gd2.drawString("O pino esta na casa de eventos", 200, 300);
+				gd2.drawString("O pino está na casa de eventos", 200, 300);
 			}
 			
 			
@@ -299,7 +423,13 @@ public class Tabuleiro extends JPanel {
 			}
 		}
 	}
+	
 	public Pino getPinoDaVez() {
 		return pinos[ctrl.getVez()-1];
 	}
+	
+	public static int sorteiaCarta() {
+		return aleatorio.nextInt(31);
+	}
+	
 }

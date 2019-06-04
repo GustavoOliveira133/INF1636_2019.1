@@ -5,13 +5,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Pino {
-	/* Pino 1 - 'V'
-	 * Pino 2 - 'A'
-	 * Pino 3 - 'L'
-	 * Pino 4 - 'M'
-	 * Pino 5 - 'R'
-	 * Pino 6 - 'C'	*/
+	/* Pino 1 - 'Vermelho'
+	 * Pino 2 - 'Azul'
+	 * Pino 3 - 'Laranja'
+	 * Pino 4 - 'Amarelo'
+	 * Pino 5 - 'Roxo'
+	 * Pino 6 - 'Cinza'	*/
 	private String cor; 
+	private boolean temCartaPrisao = false;
 	private int id;
 	private int saldo = 2458;
 	private Image i=null;
@@ -100,5 +101,11 @@ public class Pino {
 	}
 	public String getCor() {
 		return cor;
+	}
+	public void recebeCartaPrisao() {
+		temCartaPrisao=true;
+	}
+	public void gastaCartaPrisao() {
+		temCartaPrisao=false;
 	}
 }

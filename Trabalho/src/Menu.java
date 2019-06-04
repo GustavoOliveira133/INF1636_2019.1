@@ -14,7 +14,6 @@ public class Menu extends JPanel {
 	private JButton turno=new JButton("Passar o turno");
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
-	JLabel info;
 	JButton terreno = new JButton("Comprar propriedade");
 	private int d[]=new int [2];
 	
@@ -35,8 +34,8 @@ public class Menu extends JPanel {
 							p.tiraSaldo(p.getCasaPino().getValor());
 							p.getCasaPino().mudaDono(p.getPinoId());
 							String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
-			     			JOptionPane.showMessageDialog(m,msg);
-							terreno.setEnabled(false);
+			     			JOptionPane.showMessageDialog(t,msg);
+							m.atualizaBotoes(ctrl, t);
 							t.repaint();
 						}
 					}
@@ -159,20 +158,14 @@ public class Menu extends JPanel {
 	
 	public void atualizaBotoes(Controlador ctrl, Tabuleiro t) {
 		this.removeAll();
-		this.revalidate();
-		this.repaint();
-
-		String msg = stringDaVez(ctrl.getVez()); 
+		
 		Pino p = t.getPinoDaVez();
-		info=new JLabel(msg);
 		acoes.setBounds(20, 20, 300, 20);
-		info.setBounds(20,800, 240, 21);
 		dados.setBounds(150,100,150,40);
 		turno.setBounds(150, 200, 150, 40);
 		terreno.setBounds(150,300,150,40);
 
 
-		this.add(info);
 		this.add(acoes);
 		this.add(dados);
 		this.add(turno);
@@ -183,27 +176,7 @@ public class Menu extends JPanel {
 			terreno.setEnabled(true);
 		}
 		this.add(terreno);
-	}
-	
-	
-	public String stringDaVez (int vez) {
-		if (vez == 1) {
-			return "Turno do jogador 1 (Vermelho)";
-		}
-		else if (vez == 2) {
-			return "Turno do jogador 2 (Azul)";
-		}
-		else if (vez == 3) {
-			return "Turno do jogador 3 (Laranja)";
-		}
-		else if (vez == 4) {
-			return "Turno do jogador 4 (Amarelo)";
-		}
-		else if (vez == 5) {
-			return "Turno do jogador 5 (Roxo)";
-		}
-		else {
-			return "Turno do jogador 6 (Cinza)";
-		}
+		this.revalidate();
+		this.repaint();
 	}
 }

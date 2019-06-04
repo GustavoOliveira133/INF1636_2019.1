@@ -7,6 +7,8 @@ public class Casa {
 	private int id;
 	private int qtdEntrou=0;
 	private int valor;
+	private int aluguel; //aluguel a pagar para terrenos
+	private int multi; //valor p/ multiplicar os dados (empresas)
 	private int dono=-1;
 	private int tipo;
 	/* Tipos de casa: 
@@ -64,5 +66,11 @@ public class Casa {
 	}
 	public int getQtdHoteis() {
 		return qtdHoteis;
+	}
+	public void setMulti(int m) { //coloca o valor multi (para empresas)
+		multi = m;
+	}
+	public int getMulti() {
+		return multi;
 	}
 }
