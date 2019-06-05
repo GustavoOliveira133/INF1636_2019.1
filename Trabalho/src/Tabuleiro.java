@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.io.*;
 import java.util.Random;
 
@@ -83,12 +84,12 @@ public class Tabuleiro extends JPanel {
 		 * 7 - bangu I
 		 * 8 - casa cerveja/pagode
 		 */
-		//Construtor (x,y,tipo,idCasa,Preco,aluguel)
+		//Construtor (x,y,tipo,idCasa,Preco)
 		casas[0]=new Casa(20,880,0,0,0); //casa inicial
-		casas[1]=new Casa(20,810,1,1,220);
+		casas[1]=new Casa(20,810,1,1,220); //t curicica
 		casas[2]=new Casa(20,715,3,2,0);
 		casas[3]=new Casa(20,630,2,3,200);
-		casas[4]=new Casa(20,505,1,4,300);
+		casas[4]=new Casa(20,505,1,4,300); //t leme
 		casas[5]=new Casa(20,450,1,5,220);
 		casas[6]=new Casa(20,360,3,6,0);
 		casas[7]=new Casa(20,255,2,7,150);
@@ -127,6 +128,26 @@ public class Tabuleiro extends JPanel {
 		casas[19].setMulti(50);
 		casas[24].setMulti(50);
 		casas[31].setMulti(40);
+		//coloca os valores nos terrenos (aluguel,1casa,2casas,3casas,4casas,hotel,cadaCasa,cadaHotel)
+		casas[1].setValoresTerreno(28,150,450,1000,1200,1400,200,200); //curicica
+		casas[4].setValoresTerreno(26,130,390,900,1100,1275,200,200); //leme
+		casas[5].setValoresTerreno(18,90,250,700,875,1050,150,150); //vilar carioca
+		casas[8].setValoresTerreno(10,50,150,450,625,750,100,100); //morro do 18
+		casas[10].setValoresTerreno(4,20,60,180,320,450,50,50); //guapore
+		casas[11].setValoresTerreno(14,70,200,550,750,950,100,100); //tanque
+		casas[12].setValoresTerreno(26,130,390,900,1100,1275,200,200);//botafogo
+		casas[14].setValoresTerreno(22,110,330,800,975,1150,150,150);//batan
+		casas[16].setValoresTerreno(18,90,250,700,875,1050,150,150);//barbante
+		casas[20].setValoresTerreno(14,70,200,550,750,950,100,100);//gardenia azul
+		casas[21].setValoresTerreno(10,50,150,450,625,750,100,100);//caixa dagua
+		casas[22].setValoresTerreno(8,40,100,300,450,600,50,50);//kelsons
+		casas[25].setValoresTerreno(4,20,60,180,320,450,50,50);//quitungo
+		casas[26].setValoresTerreno(22,110,330,800,975,1150,150,150);//rio das pedras
+		casas[28].setValoresTerreno(12,60,180,500,700,900,100,100);//fuba
+		casas[30].setValoresTerreno(20,100,300,750,925,1100,150,150);//carobinha
+		casas[32].setValoresTerreno(6,30,90,270,400,500,50,50);//fumace
+		casas[35].setValoresTerreno(6,30,90,270,400,500,50,50);//cidade alta
+		
 		
 		addMouseListener(new MouseListener() {
     		public void mouseEntered(MouseEvent e) {}
@@ -232,9 +253,14 @@ public class Tabuleiro extends JPanel {
 			}
 			/*
 			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para terreno de outro dono (pagamento)
-				
-			}*/
-			
+				if (casas[casaNova].getQtdCasas()==0) {
+					int valor = casas[casaNova].getAluguel();
+				}
+				else if (casas[casaNova].getQtdCasas()==1) {
+					
+				}
+			}
+			*/
 			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para empresa de outras pessoa (pagamento)
 				int valorPagar = casas[casaNova].getMulti() * (d1+d2+2);
 				pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
@@ -304,10 +330,24 @@ public class Tabuleiro extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D gd2=(Graphics2D) g;
+		Graphics2D gd2=(Graphics2D) g;       
 		//Pinta o tabuleiro
 		gd2.drawImage(tabuleiro,0,0,null);
 		
+		//Pinta um retangulo para mostrar informações
+		if (ctrl.getVez()!=-1) {
+			
+			gd2.setPaint(Color.RED);
+	        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(183, 175, 370, 200, 40, 40);
+	        gd2.draw(roundedRectangle);
+	        
+			/*
+			gd2.setPaint(Color.RED);
+			gd2.fillRoundRect(183, 175, 370, 200, 40, 40);
+			*/
+		}
+		
+
 		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
 		for(int i=0;i<ctrl.getJogadores();i++) {
 			if (ctrl.getVez()==(i+1)) {
@@ -369,8 +409,12 @@ public class Tabuleiro extends JPanel {
 					gd2.drawString(valorCasaAtual, 200, 350);
 				}
 				else {
-					String casaAtual = String.format("Este terreno pertence ao jogador %d (%s) e tem %d casas e %d hotéis",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor(), pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas(),pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
+					String casaAtual = String.format("Este terreno pertence ao jogador %d (%s) e tem:",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor());
+					String numCasas = String.format("%d casas", pinos[ctrl.getVez()-1].getCasaPino().getQtdCasas());
+					String numHoteis = String.format("%d hotéis", pinos[ctrl.getVez()-1].getCasaPino().getQtdHoteis());
 					gd2.drawString(casaAtual, 200, 300);
+					gd2.drawString(numCasas, 200, 330);
+					gd2.drawString(numHoteis, 200, 350);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em uma empresa
@@ -388,7 +432,7 @@ public class Tabuleiro extends JPanel {
 				gd2.drawString("O pino está na prisao, saia com 2 números iguais nos dados", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==false) { //informa que o pino esta na prisao mas nao esta preso
-				gd2.drawString("O pino está na prisao, mas nãoo está preso", 200, 300);
+				gd2.drawString("O pino está na prisao, mas não está preso", 200, 300);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==3) { //informa que o pino esta na casa de sorte/reves
 				gd2.drawString("O pino está na casa das cartas sorte/revés", 200, 300);
