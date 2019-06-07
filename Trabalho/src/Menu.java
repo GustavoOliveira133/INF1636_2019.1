@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.imageio.*;
+import java.util.Scanner;
 public class Menu extends JPanel {
 	private Menu m=this;
+	private Scanner manipulaDados=new Scanner(System.in);
 	private JButton jogador2=new JButton("2 jogadores");
 	private JButton jogador3=new JButton("3 jogadores");
 	private JButton jogador4=new JButton("4 jogadores");
@@ -65,8 +67,23 @@ public class Menu extends JPanel {
   				int opcao = JOptionPane.showOptionDialog(t, "Deseja rolar os dados e andar com o pino da vez?", "Confirmar rolar os dados", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
   				if(opcao==0) {
   					//Rola os dois dados e guarda o resultado
-  					d[0]=Dados.rolaDados();
-  					d[1]=Dados.rolaDados();
+  					//d[0]=Dados.rolaDados();
+  					//d[1]=Dados.rolaDados();
+  					
+  					System.out.println("Digite 2 valores de dados\n");
+  					d[0]=manipulaDados.nextInt();
+  					/*while (d[0]<=0 || d[0]>=6) {
+  						System.out.println("Valor invalido, digite entre 1 e 6\n");
+  						d[0]=manipulaDados.nextInt();
+  					}*/
+  					d[1]=manipulaDados.nextInt();
+  					/*while (d[1]<=0 || d[1]>=6) {
+  						System.out.println("Valor invalido, digite entre 1 e 6\n");
+  						d[1]=manipulaDados.nextInt();
+  					}*/
+  					d[0]-=1;
+  					d[1]-=1;
+  					
   					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
   					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
   					t.clicouNosDados(d[0],d[1]);

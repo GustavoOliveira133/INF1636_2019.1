@@ -86,41 +86,41 @@ public class Tabuleiro extends JPanel {
 		 */
 		//Construtor (x,y,tipo,idCasa,Preco)
 		casas[0]=new Casa(20,880,0,0,0); //casa inicial
-		casas[1]=new Casa(20,810,1,1,220); //t curicica
-		casas[2]=new Casa(20,715,3,2,0);
-		casas[3]=new Casa(20,630,2,3,200);
-		casas[4]=new Casa(20,505,1,4,300); //t leme
-		casas[5]=new Casa(20,450,1,5,220);
-		casas[6]=new Casa(20,360,3,6,0);
-		casas[7]=new Casa(20,255,2,7,150);
-		casas[8]=new Casa(20,165,1,8,140);
-		casas[9]=new Casa(20,40,7,9,0); //prisao
-		casas[10]=new Casa(140,30,1,10,60);
-		casas[11]=new Casa(237,30,1,11,180);
-		casas[12]=new Casa(330,30,1,12,300);
-		casas[13]=new Casa(420,30,3,13,0);
-		casas[14]=new Casa(515,30,1,14,260);
-		casas[15]=new Casa(610,30,2,15,200);
-		casas[16]=new Casa(700,30,1,16,220);
-		casas[17]=new Casa(790,30,5,17,200); //casa de evento receba x
-		casas[18]=new Casa(880,40,8,18,0); //casa cerveja pagode
-		casas[19]=new Casa(880,165,2,19,200);
-		casas[20]=new Casa(880,255,1,20,180);
-		casas[21]=new Casa(880,347,1,21,140);
-		casas[22]=new Casa(880,440,1,22,120);
-		casas[23]=new Casa(880,540,3,23,0);
-		casas[24]=new Casa(880,620,2,24,200);
-		casas[25]=new Casa(880,715,1,25,60);
-		casas[26]=new Casa(880,810,1,26,260);
+		casas[1]=new Casa(15,800,1,1,220); //t curicica
+		casas[2]=new Casa(15,695,3,2,0);
+		casas[3]=new Casa(15,600,2,3,200);
+		casas[4]=new Casa(15,505,1,4,300); //t leme
+		casas[5]=new Casa(15,410,1,5,220);
+		casas[6]=new Casa(15,320,3,6,0);
+		casas[7]=new Casa(15,230,2,7,150);
+		casas[8]=new Casa(15,140,1,8,140);
+		casas[9]=new Casa(15,30,7,9,0); //prisao
+		casas[10]=new Casa(130,10,1,10,60);
+		casas[11]=new Casa(223,10,1,11,180);
+		casas[12]=new Casa(316,10,1,12,300);
+		casas[13]=new Casa(409,10,3,13,0);
+		casas[14]=new Casa(595,10,1,14,260);
+		casas[15]=new Casa(688,10,2,15,200);
+		casas[16]=new Casa(781,10,1,16,220);
+		casas[17]=new Casa(874,10,5,17,200); //casa de evento receba x
+		casas[18]=new Casa(880,10,8,18,0); //casa cerveja pagode
+		casas[19]=new Casa(870,130,2,19,200);
+		casas[20]=new Casa(870,225,1,20,180);
+		casas[21]=new Casa(870,318,1,21,140);
+		casas[22]=new Casa(870,411,1,22,120);
+		casas[23]=new Casa(870,504,3,23,0);
+		casas[24]=new Casa(870,597,2,24,200);
+		casas[25]=new Casa(870,690,1,25,60);
+		casas[26]=new Casa(870,783,1,26,260);
 		casas[27]=new Casa(880,870,6,27,0); //casa va para prisao
-		casas[28]=new Casa(790,900,1,28,160);
-		casas[29]=new Casa(700,900,3,29,0);
-		casas[30]=new Casa(610,900,1,30,240);
-		casas[31]=new Casa(515,900,2,31,150);
-		casas[32]=new Casa(420,900,1,32,100);
-		casas[33]=new Casa(330,900,3,33,0);
-		casas[34]=new Casa(237,900,4,34,200); //casa de evento pague x
-		casas[35]=new Casa(140,900,1,35,100);
+		casas[28]=new Casa(780,875,1,28,160);
+		casas[29]=new Casa(687,875,3,29,0);
+		casas[30]=new Casa(594,875,1,30,240);
+		casas[31]=new Casa(501,875,2,31,150);
+		casas[32]=new Casa(408,875,1,32,100);
+		casas[33]=new Casa(315,875,3,33,0);
+		casas[34]=new Casa(222,875,4,34,200); //casa de evento pague x
+		casas[35]=new Casa(129,875,1,35,100);
 		//Coloca multi nas empresas
 		casas[3].setMulti(50);
 		casas[7].setMulti(40);
@@ -251,16 +251,15 @@ public class Tabuleiro extends JPanel {
 	     			JOptionPane.showMessageDialog(t,"Você foi para a prisão!!");
 				}
 			}
-			/*
+			
 			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para terreno de outro dono (pagamento)
-				if (casas[casaNova].getQtdCasas()==0) {
-					int valor = casas[casaNova].getAluguel();
-				}
-				else if (casas[casaNova].getQtdCasas()==1) {
-					
-				}
+				int valor = casas[casaNova].getValorAluguel(); //valor de aluguel a ser pago (com casas ou hotel, se tiver)
+				pinos[pinoDaVez].tiraSaldo(valor); //tira do pino da vez o valor a ser pago
+				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valor); //soma o valor a ser pago no saldo do dono da casa
+				String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valor,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
+     			JOptionPane.showMessageDialog(t,msg);
 			}
-			*/
+			
 			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para empresa de outras pessoa (pagamento)
 				int valorPagar = casas[casaNova].getMulti() * (d1+d2+2);
 				pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
@@ -288,12 +287,7 @@ public class Tabuleiro extends JPanel {
 		//Criar os pinos de acordo com a quantidade de jogadores selecionado e pinta-los no tabuleiro
 		int qtd=ctrl.getJogadores();
 		pinos=new Pino[qtd];
-		/* Pino 1 - 'V'
-		 * Pino 2 - 'A'
-		 * Pino 3 - 'L'
-		 * Pino 4 - 'M'
-		 * Pino 5 - 'R'
-		 * Pino 6 - 'C'	*/
+
 		if (qtd==2) {
 			pinos[0]=new Pino("pin0.png",casas[0],"Vermelho",1);
 			pinos[1]=new Pino("pin1.png",casas[0],"Azul",2);
