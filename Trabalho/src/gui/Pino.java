@@ -11,6 +11,7 @@ public class Pino {
 	 * Pino 4 - 'Amarelo'
 	 * Pino 5 - 'Roxo'
 	 * Pino 6 - 'Cinza'	*/
+	private int jogada=0; //campo para verificar quantas tentativas o pino fez para tentar sair da prisao
 	private String cor; 
 	private boolean temCartaPrisao = false;
 	private int id;
@@ -18,6 +19,15 @@ public class Pino {
 	private Image i=null;
 	private Casa c;
 	private boolean foiParaPrisao = false;
+	private int[] donoCor = {0,0,0,0,0,0}; //campo para a quantidade de terrenos da mesma cor que o pino é dono, sendo:
+	/*
+	 * donoCor[0] = laranja
+	 * donoCor[1] = vermelho
+	 * donoCor[2] = amarelo
+	 * donoCor[3] = roxo
+	 * donoCor[4] = azul
+	 * donoCor[5] = verde
+	 */
 	
 	public Pino(String s,Casa c, String cor,int id) {
 		this.id = id;
@@ -107,5 +117,23 @@ public class Pino {
 	}
 	public void gastaCartaPrisao() {
 		temCartaPrisao=false;
+	}
+	public boolean verificaCartaPrisao() {
+		return temCartaPrisao;
+	}
+	public void aumentaQtdJogadas() {
+		jogada++;
+	}
+	public void zeraJogadas() {
+		jogada=0;
+	}
+	public int getQtdJogadas() {
+		return jogada;
+	}
+	public void aumentaCorTerreno(int i) {
+		donoCor[i]++;
+	}
+	public int getQtdCorTerreno(int i) {
+		return donoCor[i];
 	}
 }

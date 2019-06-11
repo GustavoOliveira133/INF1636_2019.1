@@ -1,6 +1,15 @@
 package gui;
 
 public class Terreno extends Casa{
+	/* Cores:
+	 * 0 = laranja
+	 * 1 = vermelho
+	 * 2 = amarelo
+	 * 3 = roxo
+	 * 4 = azul
+	 * 5 = verde
+	 */
+	private int cor;
 	private int qtdCasas = 0;
 	private int qtdHoteis = 0;
 	private int x;
@@ -14,8 +23,9 @@ public class Terreno extends Casa{
 	private int dono=-1;
 	private int tipo;
 	
-	public Terreno (int x, int y, int tipo, int id, int preco) {
+	public Terreno (int x, int y, int tipo, int id, int preco, int cor) {
 		super(x,y,tipo,id,preco);
+		this.cor=cor;
 		this.x=x;
 		this.y=y;
 		this.tipo=tipo;
@@ -51,7 +61,7 @@ public class Terreno extends Casa{
 		
 	}
 	public void setValoresTerreno(int a,int c1,int c2,int c3,int c4, int h, int cadaC, int cadaH) {
-		valorTotalAluguel[0] = a;
+		valorTotalAluguel[0]=a;
 		valorTotalAluguel[1]=c1;
 		valorTotalAluguel[2]=c2;
 		valorTotalAluguel[3]=c3;
@@ -59,5 +69,14 @@ public class Terreno extends Casa{
 		valorTotalAluguel[5]=h;
 		cadaCasa=cadaC;
 		cadaHotel=cadaH;
+	}
+	public int getCor() {
+		return cor;
+	}
+	public void construiuCasa() {
+		qtdCasas++;
+	}
+	public void construiuHotel() {
+		qtdHoteis++;
 	}
 }
