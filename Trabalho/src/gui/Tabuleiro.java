@@ -121,13 +121,15 @@ public class Tabuleiro extends JPanel {
 		casas[33]=new Casa(315,875,3,33,0);
 		casas[34]=new Casa(222,875,4,34,200); //casa de evento pague x
 		casas[35]=new Terreno(129,875,1,35,100,4); //t cidade alta
+		
 		//Coloca multi nas empresas
-		((Empresa)casas[3]).setMulti(50);
-		((Empresa)casas[7]).setMulti(40);
-		((Empresa) casas[15]).setMulti(50);
-		((Empresa) casas[19]).setMulti(50);
-		((Empresa) casas[24]).setMulti(50);
-		((Empresa) casas[31]).setMulti(40);
+		((Empresa)casas[3]).setMulti(50); //caca niquel
+		((Empresa)casas[7]).setMulti(40); //botijao de gas
+		((Empresa) casas[15]).setMulti(50); //transporte alternativo
+		((Empresa) casas[19]).setMulti(50); //seguranca
+		((Empresa) casas[24]).setMulti(50); //moto-taxi
+		((Empresa) casas[31]).setMulti(40); //tv a gato
+		
 		//coloca os valores nos terrenos (aluguel,1casa,2casas,3casas,4casas,hotel,cadaCasa,cadaHotel)
 		((Terreno) casas[1]).setValoresTerreno(28,150,450,1000,1200,1400,200,200); //curicica
 		((Terreno) casas[4]).setValoresTerreno(26,130,390,900,1100,1275,200,200); //leme
@@ -148,6 +150,57 @@ public class Tabuleiro extends JPanel {
 		((Terreno) casas[32]).setValoresTerreno(6,30,90,270,400,500,50,50);//fumace
 		((Terreno) casas[35]).setValoresTerreno(6,30,90,270,400,500,50,50);//cidade alta
 		
+		//coloca imagens terrenos e empresas
+		((Terreno) casas[1]).colocaImagem("curicica.jpg");
+		((Terreno) casas[4]).colocaImagem("leme.jpg");
+		((Terreno) casas[5]).colocaImagem("vilarcarioca.jpg");
+		((Terreno) casas[8]).colocaImagem("morro18.jpg");
+		((Terreno) casas[10]).colocaImagem("guapore.jpg");
+		((Terreno) casas[11]).colocaImagem("tanque.jpg");
+		((Terreno) casas[12]).colocaImagem("botafogo.jpg");
+		((Terreno) casas[14]).colocaImagem("batan.jpg");
+		((Terreno) casas[16]).colocaImagem("barbante.jpg");
+		((Terreno) casas[20]).colocaImagem("gardeniaazul.jpg");
+		((Terreno) casas[21]).colocaImagem("caixaagua.jpg");
+		((Terreno) casas[22]).colocaImagem("kelsons.jpg");
+		((Terreno) casas[25]).colocaImagem("quitungo.jpg");
+		((Terreno) casas[26]).colocaImagem("riodaspedras.jpg");
+		((Terreno) casas[28]).colocaImagem("fuba.jpg");
+		((Terreno) casas[30]).colocaImagem("carobinha.jpg");
+		((Terreno) casas[32]).colocaImagem("fumace.jpg");
+		((Terreno) casas[35]).colocaImagem("cidadealta.jpg");
+		((Empresa)casas[3]).colocaImagem("empresa3.jpg"); //caca niquel
+		((Empresa)casas[7]).colocaImagem("empresa2.jpg"); //botijao de gas
+		((Empresa) casas[15]).colocaImagem("empresa6.jpg"); //transporte alternativo
+		((Empresa) casas[19]).colocaImagem("empresa5.jpg"); //seguranca
+		((Empresa) casas[24]).colocaImagem("empresa4.jpg"); //moto-taxi
+		((Empresa) casas[31]).colocaImagem("empresa1.jpg");//tv a gato
+		
+		//coloca x e y terreno e empresa
+		((Terreno) casas[1]).setXY(8,778,0);
+		((Terreno) casas[4]).setXY(8,500,0);
+		((Terreno) casas[5]).setXY(8,406,0);
+		((Terreno) casas[8]).setXY(8,130,0);
+		((Terreno) casas[10]).setXY(130,8,1);
+		((Terreno) casas[11]).setXY(222,8,1);
+		((Terreno) casas[12]).setXY(314,8,1);
+		((Terreno) casas[14]).setXY(500,8,1);
+		((Terreno) casas[16]).setXY(686,8,1);
+		((Terreno) casas[20]).setXY(872,222,0);
+		((Terreno) casas[21]).setXY(872,314,0);
+		((Terreno) casas[22]).setXY(872,408,0);
+		((Terreno) casas[25]).setXY(872,686,0);
+		((Terreno) casas[26]).setXY(872,779,0);
+		((Terreno) casas[28]).setXY(779,872,1);
+		((Terreno) casas[30]).setXY(585,872,1);
+		((Terreno) casas[32]).setXY(408,872,1);
+		((Terreno) casas[35]).setXY(129,872,1);
+		((Empresa)casas[3]).setXY(8,592,0); //caca niquel
+		((Empresa)casas[7]).setXY(8,222,0); //botijao de gas
+		((Empresa) casas[15]).setXY(593,8,1);//transporte alternativo
+		((Empresa) casas[19]).setXY(872,129,0); //seguranca
+		((Empresa) casas[24]).setXY(872,529,0); //moto-taxi
+		((Empresa) casas[31]).setXY(502,872,1);//tv a gato
 		
 		addMouseListener(new MouseListener() {
     		public void mouseEntered(MouseEvent e) {}

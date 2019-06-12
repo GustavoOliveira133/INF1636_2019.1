@@ -1,5 +1,11 @@
 package gui;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Terreno extends Casa{
 	/* Cores:
 	 * 0 = laranja
@@ -12,6 +18,7 @@ public class Terreno extends Casa{
 	private int cor;
 	private int qtdCasas = 0;
 	private int qtdHoteis = 0;
+	private Image i=null;
 	private int x;
 	private int y;
 	private int id;
@@ -22,6 +29,7 @@ public class Terreno extends Casa{
 	private int cadaHotel;//valor a ser pago para contruir cada hotel
 	private int dono=-1;
 	private int tipo;
+	private int posicao; //0 = vertical, 1=horizontal
 	
 	public Terreno (int x, int y, int tipo, int id, int preco, int cor) {
 		super(x,y,tipo,id,preco);
@@ -78,5 +86,31 @@ public class Terreno extends Casa{
 	}
 	public void construiuHotel() {
 		qtdHoteis++;
+	}
+	public void colocaImagem(String s) {
+		try {
+			i=ImageIO.read(new File(s));
+		}
+		catch(IOException e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
+	}
+	public Image getImage() {
+		return i;
+	}
+	public void setXY(int x, int y, int posicao) {
+		this.posicao=posicao;
+		this.x=x;
+		this.y=y;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
+	public int getPos() {
+		return posicao;
 	}
 }
