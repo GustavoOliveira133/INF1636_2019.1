@@ -16,29 +16,20 @@ public class Terreno extends Casa{
 	 * 5 = verde
 	 */
 	private int cor;
+	private boolean mostraCarta=false;
 	private int qtdCasas = 0;
 	private int qtdHoteis = 0;
 	private Image i=null;
-	private int x;
-	private int y;
-	private int id;
-	private int qtdEntrou=0;
-	private int valor;
+	private int posX;
+	private int posY;
 	private int[] valorTotalAluguel = new int[6]; //valor total a ser pago (v[0] = aluguel, v[1] =com 1casa ... v[5] =com hotel)
 	private int cadaCasa; //valor a ser pago para contruir cada casa
 	private int cadaHotel;//valor a ser pago para contruir cada hotel
-	private int dono=-1;
-	private int tipo;
 	private int posicao; //0 = vertical, 1=horizontal
 	
 	public Terreno (int x, int y, int tipo, int id, int preco, int cor) {
 		super(x,y,tipo,id,preco);
 		this.cor=cor;
-		this.x=x;
-		this.y=y;
-		this.tipo=tipo;
-		this.id=id;
-		this.valor=preco;
 	}
 	
 	public int getQtdCasas() {
@@ -101,16 +92,25 @@ public class Terreno extends Casa{
 	}
 	public void setXY(int x, int y, int posicao) {
 		this.posicao=posicao;
-		this.x=x;
-		this.y=y;
+		posX=x;
+		posY=y;
 	}
 	public int getX() {
-		return x;
+		return posX;
 	}
 	public int getY() {
-		return y;
+		return posY;
 	}
 	public int getPos() {
 		return posicao;
+	}
+	public void MostraCarta() {
+		mostraCarta=true;
+	}
+	public void unsetCarta() {
+		mostraCarta = false;
+	}
+	public boolean getMostraCarta() {
+		return mostraCarta;
 	}
 }

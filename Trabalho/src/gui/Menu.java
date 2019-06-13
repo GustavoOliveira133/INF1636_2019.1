@@ -105,7 +105,7 @@ public class Menu extends JPanel {
   				if(opcao==0) {
   					
   					/* Escolhe dois valores para os dados */
-  					
+  					/*
   					Scanner s = new Scanner( System.in );
   					System.out.printf("Entre com 2 valores para os dados");
   					d[0] = s.nextInt()-1;
@@ -115,10 +115,10 @@ public class Menu extends JPanel {
   					t.clicouNosDados(d[0],d[1]);
   					m.atualizaBotoes(ctrl,t);
   					dados.setEnabled(false);
-  					
+  					*/
   					
   					//Rola os dois dados e guarda o resultado
-  					/*
+  					
   					d[0]=Dados.rolaDados();
   					d[1]=Dados.rolaDados();
   					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
@@ -126,7 +126,7 @@ public class Menu extends JPanel {
   					t.clicouNosDados(d[0],d[1]);
   					m.atualizaBotoes(ctrl,t);
   					dados.setEnabled(false);
-  					*/
+  					
   				}
 			  }
 		} );

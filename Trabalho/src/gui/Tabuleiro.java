@@ -123,8 +123,8 @@ public class Tabuleiro extends JPanel {
 		casas[35]=new Terreno(129,875,1,35,100,4); //t cidade alta
 		
 		//Coloca multi nas empresas
-		((Empresa)casas[3]).setMulti(50); //caca niquel
-		((Empresa)casas[7]).setMulti(40); //botijao de gas
+		((Empresa) casas[3]).setMulti(50); //caca niquel
+		((Empresa) casas[7]).setMulti(40); //botijao de gas
 		((Empresa) casas[15]).setMulti(50); //transporte alternativo
 		((Empresa) casas[19]).setMulti(50); //seguranca
 		((Empresa) casas[24]).setMulti(50); //moto-taxi
@@ -169,8 +169,8 @@ public class Tabuleiro extends JPanel {
 		((Terreno) casas[30]).colocaImagem("carobinha.jpg");
 		((Terreno) casas[32]).colocaImagem("fumace.jpg");
 		((Terreno) casas[35]).colocaImagem("cidadealta.jpg");
-		((Empresa)casas[3]).colocaImagem("empresa3.jpg"); //caca niquel
-		((Empresa)casas[7]).colocaImagem("empresa2.jpg"); //botijao de gas
+		((Empresa) casas[3]).colocaImagem("empresa3.jpg"); //caca niquel
+		((Empresa) casas[7]).colocaImagem("empresa2.jpg"); //botijao de gas
 		((Empresa) casas[15]).colocaImagem("empresa6.jpg"); //transporte alternativo
 		((Empresa) casas[19]).colocaImagem("empresa5.jpg"); //seguranca
 		((Empresa) casas[24]).colocaImagem("empresa4.jpg"); //moto-taxi
@@ -195,8 +195,8 @@ public class Tabuleiro extends JPanel {
 		((Terreno) casas[30]).setXY(585,872,1);
 		((Terreno) casas[32]).setXY(408,872,1);
 		((Terreno) casas[35]).setXY(129,872,1);
-		((Empresa)casas[3]).setXY(8,592,0); //caca niquel
-		((Empresa)casas[7]).setXY(8,222,0); //botijao de gas
+		((Empresa) casas[3]).setXY(8,592,0); //caca niquel
+		((Empresa) casas[7]).setXY(8,222,0); //botijao de gas
 		((Empresa) casas[15]).setXY(593,8,1);//transporte alternativo
 		((Empresa) casas[19]).setXY(872,129,0); //seguranca
 		((Empresa) casas[24]).setXY(872,529,0); //moto-taxi
@@ -324,16 +324,24 @@ public class Tabuleiro extends JPanel {
 	     			JOptionPane.showMessageDialog(t,"Você foi para a prisão!!");
 				}
 			}
+			//prepara para mostrar a carta de terreno/empresa, caso seja uma nova casa deste tipo
+			if (casas[casaNova].getTipo()==1) {
+				((Terreno) casas[casaNova]).MostraCarta();
+			}
+			if (casas[casaNova].getTipo()==2) {
+				((Empresa) casas[casaNova]).MostraCarta();
+			}
 			
-			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para terreno de outro dono (pagamento)
+			//pino foi para terreno de outro dono (pagamento)
+			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { 
 				int valor = ((Terreno) casas[casaNova]).getValorAluguel(); //valor de aluguel a ser pago (com casas ou hotel, se tiver)
 				pinos[pinoDaVez].tiraSaldo(valor); //tira do pino da vez o valor a ser pago
 				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valor); //soma o valor a ser pago no saldo do dono da casa
 				String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valor,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
      			JOptionPane.showMessageDialog(t,msg);
 			}
-			
-			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { //pino foi para empresa de outras pessoa (pagamento)
+			//pino foi para empresa de outras pessoa (pagamento)
+			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { 
 				int valorPagar = ((Empresa) casas[casaNova]).getMulti() * (d1+d2+2);
 				pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
 				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valorPagar);
@@ -470,29 +478,33 @@ public class Tabuleiro extends JPanel {
 			
 			//pinta informacoes da casa atual
 			if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==1) { //informa o pino que esta em um terreno
+				gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta do terreno
 				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //terreno nao tem dono
 					String valorCasaAtual = String.format("Para comprá-lo é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
-					gd2.drawString("Este terreno não tem dono", 200, 300);
-					gd2.drawString(valorCasaAtual, 200, 350);
+					gd2.drawString("Este terreno não tem dono", 650, 650);
+					gd2.drawString(valorCasaAtual, 650, 700);
 				}
 				else { //tem dono
+					gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta do terreno
 					String casaAtual = String.format("Este terreno pertence ao jogador %d (%s) e tem:",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor());
 					String numCasas = String.format("%d casas", ((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getQtdCasas());
 					String numHoteis = String.format("%d hotéis", ((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getQtdHoteis());
-					gd2.drawString(casaAtual, 200, 300);
-					gd2.drawString(numCasas, 200, 330);
-					gd2.drawString(numHoteis, 200, 350);
+					gd2.drawString(casaAtual, 650, 650);
+					gd2.drawString(numCasas, 650, 700);
+					gd2.drawString(numHoteis, 650, 730);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em uma empresa
+				gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta de empresa
 				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //a empresa nao tem dono
 					String valorCasaAtual = String.format("Para comprá-la é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
-					gd2.drawString("Esta empresa não tem dono", 200, 300);
-					gd2.drawString(valorCasaAtual, 200, 350);
+					gd2.drawString("Esta empresa não tem dono", 650, 650);
+					gd2.drawString(valorCasaAtual, 650, 700);
 				}
-				else {
+				else { //tem dono
+					gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta de empresa
 					String casaAtual = String.format("Esta empresa pertence ao jogador %d (%s)",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor());
-					gd2.drawString(casaAtual, 200, 300);
+					gd2.drawString(casaAtual, 650, 650);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==true) { //informa que o pino esta preso
@@ -531,19 +543,19 @@ public class Tabuleiro extends JPanel {
 		for(int j=0;j<6;j++) {
 			if(d[j].getFlag()==true) {
 				if(d[j].getRepetido()==true) {
-					gd2.drawImage(d[j].getImage(),250,700,100,100,null);
-					gd2.drawImage(d[j].getImage(),550,700,100,100,null);
+					gd2.drawImage(d[j].getImage(),150,700,100,100,null);
+					gd2.drawImage(d[j].getImage(),300,700,100,100,null);
 					d[j].unsetFlag();
 					d[j].unsetRepetido();
 					break;
 				}
 				else if (p==0) {
-					gd2.drawImage(d[j].getImage(),250,700,100,100,null);
+					gd2.drawImage(d[j].getImage(),150,700,100,100,null);
 					d[j].unsetFlag();
 					p=1;
 				}
 				else if (p==1) {
-					gd2.drawImage(d[j].getImage(),550,700,100,100,null);
+					gd2.drawImage(d[j].getImage(),300,700,100,100,null);
 					d[j].unsetFlag();
 				}
 				

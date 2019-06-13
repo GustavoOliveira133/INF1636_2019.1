@@ -8,23 +8,14 @@ import javax.imageio.ImageIO;
 
 public class Empresa extends Casa{
 	private Image i=null;
-	private int x;
-	private int y;
-	private int id;
-	private int qtdEntrou=0;
-	private int valor;
-	private int dono=-1;
-	private int tipo;
+	private boolean mostraCarta=false;
+	private int posX;
+	private int posY;
 	private int posicao; //0 = vertical, 1=horizontal
 	private int multi; //valor p/ multiplicar os dados (empresas)
 	
 	public Empresa (int x, int y, int tipo, int id, int preco) {
 		super(x,y,tipo,id,preco);
-		this.x=x;
-		this.y=y;
-		this.tipo=tipo;
-		this.id=id;
-		this.valor=preco;
 	}
 	
 	public void setMulti(int m) { //coloca o valor multi (para empresas)
@@ -47,16 +38,22 @@ public class Empresa extends Casa{
 	}
 	public void setXY(int x, int y, int posicao) {
 		this.posicao=posicao;
-		this.x=x;
-		this.y=y;
+		posX=x;
+		posY=y;
 	}
 	public int getX() {
-		return x;
+		return posX;
 	}
 	public int getY() {
-		return y;
+		return posY;
 	}
 	public int getPos() {
 		return posicao;
+	}
+	public void MostraCarta() {
+		mostraCarta=true;
+	}
+	public void unsetCarta() {
+		mostraCarta = false;
 	}
 }
