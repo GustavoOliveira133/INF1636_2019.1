@@ -413,7 +413,7 @@ public class Tabuleiro extends JPanel {
 		if (ctrl.getVez()!=-1) {
 			
 			gd2.setPaint(Color.black);
-	        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(183, 175, 395, 200, 40, 40);
+	        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(138, 138, 475, 250, 40, 40);
 	        gd2.draw(roundedRectangle);
 	        
 			/*
@@ -443,7 +443,7 @@ public class Tabuleiro extends JPanel {
 		for (int i=0;i<31;i++) {
 			if (cartasSR[i].getFoiTirada()==true) {
 				marca = i; //marca para retirá-la depois de pintar
-				gd2.drawImage(cartasSR[i].getImage(),610,180,null);
+				gd2.drawImage(cartasSR[i].getImage(),630,180,null);
 			}
 		}
 		cartasSR[marca].unsetFoiTirada();
@@ -469,69 +469,96 @@ public class Tabuleiro extends JPanel {
 			else {
 				gd2.setColor(Color.gray);
 			}
-			gd2.drawString(turno, 200, 200);
+			gd2.setFont(new Font("Verdana",1,20));
+			gd2.drawString(turno, 150, 180);
 			
 			// pinta o saldo do jogador
 			String saldo = String.format("Saldo do jogador: %d", pinos[ctrl.getVez()-1].getSaldo());
 			gd2.setColor(Color.black);
-			gd2.drawString(saldo, 200, 250);
-			
+			gd2.drawString(saldo, 150, 230);
+			gd2.setFont(new Font("Verdana",1,15));
 			//pinta informacoes da casa atual
 			if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==1) { //informa o pino que esta em um terreno
-				gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta do terreno
+				//desenha um retangulo para posicionar a carta
+		        RoundRectangle2D roundedRectangle2 = new RoundRectangle2D.Float(138, 388, 222, 280, 40, 40);
+		        gd2.setColor(Color.white);
+		        gd2.fillRoundRect(138, 388, 222, 280, 40, 40);
+		        gd2.setColor(Color.black);
+		        gd2.draw(roundedRectangle2);
+				gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),150,400,200,260,null); //pinta a carta do terreno
 				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //terreno nao tem dono
 					String valorCasaAtual = String.format("Para comprá-lo é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
-					gd2.drawString("Este terreno não tem dono", 650, 650);
-					gd2.drawString(valorCasaAtual, 650, 700);
+					gd2.drawString("Este terreno não tem dono", 150, 280);
+					gd2.drawString(valorCasaAtual, 150, 300);
 				}
 				else { //tem dono
-					gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta do terreno
+					//desenha um retangulo para posicionar a carta
+			        RoundRectangle2D roundedRectangle3 = new RoundRectangle2D.Float(138, 388, 222, 280, 40, 40);
+			        gd2.setColor(Color.white);
+			        gd2.fillRoundRect(138, 388, 222, 280, 40, 40);
+			        gd2.setColor(Color.black);
+			        gd2.draw(roundedRectangle3);
+					gd2.drawImage(((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),150,400,200,260,null); //pinta a carta do terreno
 					String casaAtual = String.format("Este terreno pertence ao jogador %d (%s) e tem:",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor());
 					String numCasas = String.format("%d casas", ((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getQtdCasas());
 					String numHoteis = String.format("%d hotéis", ((Terreno) pinos[ctrl.getVez()-1].getCasaPino()).getQtdHoteis());
-					gd2.drawString(casaAtual, 650, 650);
-					gd2.drawString(numCasas, 650, 700);
-					gd2.drawString(numHoteis, 650, 730);
+					gd2.drawString(casaAtual, 150, 280);
+					gd2.drawString(numCasas, 150, 300);
+					gd2.drawString(numHoteis, 150, 320);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==2) { //informa o pino que esta em uma empresa
-				gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta de empresa
+				//desenha um retangulo para posicionar a carta
+		        RoundRectangle2D roundedRectangle2 = new RoundRectangle2D.Float(138, 388, 222, 280, 40, 40);
+		        gd2.setColor(Color.white);
+		        gd2.fillRoundRect(138, 388, 222, 280, 40, 40);
+		        gd2.setColor(Color.black);
+		        gd2.draw(roundedRectangle2);
+				gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),150,400,200,260,null); //pinta a carta de empresa
 				if (pinos[ctrl.getVez()-1].getCasaPino().getDono()==-1) { //a empresa nao tem dono
 					String valorCasaAtual = String.format("Para comprá-la é preciso pagar R$%d",pinos[ctrl.getVez()-1].getCasaPino().getValor());
-					gd2.drawString("Esta empresa não tem dono", 650, 650);
-					gd2.drawString(valorCasaAtual, 650, 700);
+					gd2.drawString("Esta empresa não tem dono", 150, 280);
+					gd2.drawString(valorCasaAtual, 150, 300);
 				}
 				else { //tem dono
-					gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),450,600,200,260,null); //pinta a carta de empresa
+					//desenha um retangulo para posicionar a carta
+			        RoundRectangle2D roundedRectangle3 = new RoundRectangle2D.Float(138, 388, 222, 280, 40, 40);
+			        gd2.setColor(Color.white);
+			        gd2.fillRoundRect(138, 388, 222, 280, 40, 40);
+			        gd2.setColor(Color.black);
+			        gd2.draw(roundedRectangle3);
+					gd2.drawImage(((Empresa) pinos[ctrl.getVez()-1].getCasaPino()).getImage(),150,400,200,260,null); //pinta a carta de empresa
 					String casaAtual = String.format("Esta empresa pertence ao jogador %d (%s)",pinos[ctrl.getVez()-1].getCasaPino().getDono(),pinos[pinos[ctrl.getVez()-1].getCasaPino().getDono()-1].getCor());
-					gd2.drawString(casaAtual, 650, 650);
+					gd2.drawString(casaAtual, 150, 280);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==true) { //informa que o pino esta preso
-				gd2.drawString("O pino está na prisao, saia com 2 números iguais nos dados", 200, 300);
+				gd2.drawString("O pino está na prisao,", 150, 250);
+				gd2.drawString("saia com 2 números iguais nos dados", 150, 270);
 				String qtdJogadas = String.format("Tentativas restantes para tirar números iguais: %d",(4-pinos[ctrl.getVez()-1].getQtdJogadas()));
-				gd2.drawString(qtdJogadas, 200, 330);
+				gd2.drawString(qtdJogadas, 150, 310);
 				if (pinos[ctrl.getVez()-1].getQtdJogadas()<4) {
-					gd2.drawString("Ao esgotar as tentativas, você pagará R$50 ao banco e andará", 200, 350);
+					gd2.drawString("Ao esgotar as tentativas,", 150, 340);
+					gd2.drawString("você pagará R$50 ao banco e andará", 150, 360);
 				}
 				else {
-					gd2.drawString("Você pagará R$50 ao banco, caso não tire 2 valores iguais, e andará", 200, 350);
+					gd2.drawString("Você pagará R$50 ao banco, e andará", 150, 340);
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==false) { //informa que o pino esta na prisao mas nao esta preso
-				gd2.drawString("O pino está na prisao, mas não está preso", 200, 300);
+				gd2.drawString("O pino está na prisao, mas não está preso", 150, 280);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==3) { //informa que o pino esta na casa de sorte/reves
-				gd2.drawString("O pino está na casa das cartas sorte/revés", 200, 300);
+				gd2.drawString("O pino está na casa das cartas sorte/revés", 150, 280);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==0) { //informa que o pino esta na casa de inicio
-				gd2.drawString("O pino está na casa de início", 200, 300);
+				gd2.drawString("O pino está na casa de início", 150, 280);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==8) { //informa q o pino esta na casa especial
-				gd2.drawString("O pino está na casa de cerveja e pagode!", 200, 300);
+				gd2.drawString("O pino está na casa de cerveja e pagode!", 150, 280);
 			}
 			else { //informa q o pino esta na casa de eventos
-				gd2.drawString("O pino está na casa de eventos", 200, 300);
+				gd2.drawString("O pino está na casa de eventos", 150, 280);
 			}
 			
 			
