@@ -12,6 +12,8 @@ public class MenuInferior extends JPanel {
 	private JButton jogador5=new JButton("5 jogadores");
 	private JButton jogador6=new JButton("6 jogadores");
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
+	JButton salvar = new JButton("Salvar Jogo");
+	JButton carregar = new JButton("Carregar Jogo");
 	private static Fachada ctrl=Fachada.getFachada();
 	
 	public MenuInferior(Tabuleiro t,Menu men) {
@@ -26,6 +28,15 @@ public class MenuInferior extends JPanel {
 			jogador4.setBounds(50, 160,150, 40);
 			jogador5.setBounds(260, 160,150, 40);
 			jogador6.setBounds(150, 240,150, 40);
+			
+			//botoes de salvar/carregar
+			salvar.setVisible(false);
+			carregar.setVisible(false);
+			salvar.setBounds(50, 80,150, 40);
+			carregar.setBounds(260, 80,150, 40);
+			this.add(salvar);
+			this.add(carregar);
+			
 			//adiciona o JLabel no painel
 			m.add(inicio);
 			//adiciona o botao para escolher 2 jogadores
@@ -101,8 +112,11 @@ public class MenuInferior extends JPanel {
 		remove(jogador5);
 		remove(jogador6);
 		remove(inicio);
+		salvar.setVisible(true);
+		carregar.setVisible(true);
 		men.exibeBotoes();
 		men.atualizaBotoes(ctrl,t);
+
 		this.repaint();
 		this.revalidate(); 
 	}

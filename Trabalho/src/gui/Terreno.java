@@ -79,6 +79,10 @@ public class Terreno extends Casa{
 	public void construiuHotel() {
 		qtdHoteis++;
 	}
+	public void zeraCasasHotel() {
+		qtdCasas=0;
+		qtdHoteis=0;
+	}
 	public void colocaImagem(String s) {
 		try {
 			i=ImageIO.read(new File(s));

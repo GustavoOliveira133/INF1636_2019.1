@@ -11,8 +11,8 @@ public class Menu extends JPanel {
 	private JButton dados=new JButton("Rolar os dados");
 	private JButton turno=new JButton("Passar o turno");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
-	JButton terreno = new JButton("Comprar propriedade");
-	JButton salvar = new JButton("Salvar");
+	JButton propriedade = new JButton("Comprar propriedade");
+	JButton vender = new JButton("Vender propriedade");
 	JButton bcasa = new JButton("Construir Casa");
 	JButton hotel = new JButton("Contruir Hotel");
 	private int d[]=new int [2];
@@ -25,36 +25,36 @@ public class Menu extends JPanel {
 		acoes.setBounds(80, 20, 350, 20);
 
 		this.add(hotel);
-		hotel.setBounds(250,200,150,40);
+		hotel.setBounds(250,200,160,40);
 
-		this.add(salvar);
-		salvar.setBounds(50, 400, 150, 40);
+		this.add(vender);
+		vender.setBounds(250, 300, 160, 40);
 
 		this.add(dados);
-		dados.setBounds(50,100,150,40);
+		dados.setBounds(50,100,160,40);
 
 		this.add(turno);
-		turno.setBounds(50, 200, 150, 40);
+		turno.setBounds(50, 200, 160, 40);
 
-		this.add(terreno);
-		terreno.setBounds(50,300,150,40);
+		this.add(propriedade);
+		propriedade.setBounds(50,300,160,40);
 
 		this.add(bcasa);
-		bcasa.setBounds(250,100,150,40);
+		bcasa.setBounds(250,100,160,40);
 		
 		acoes.setFont(new Font("Verdana",1,18));
 		acoes.setVisible(false);
 		turno.setVisible(false);
 		dados.setVisible(false);
-		salvar.setVisible(false);
+		vender.setVisible(false);
 		bcasa.setVisible(false);
 		hotel.setVisible(false);
-		terreno.setVisible(false);
-		//Cria um ActionListener para o botao "comprar terreno"
-		terreno.addActionListener(new ActionListener() { 
+		propriedade.setVisible(false);
+		//Cria um ActionListener para o botao "vender propriedade"
+		vender.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) {
 				  Object[] options = { "Confirmar", "Cancelar" };
-					int opcao = JOptionPane.showOptionDialog(t, "Deseja comprar esta propriedade?", "Confirmar compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+					int opcao = JOptionPane.showOptionDialog(t, "Deseja vender esta propriedade?", "Confirmar venda", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 					if(opcao==0) {
 						Pino p = t.getPinoDaVez();
 						if ((p.getCasaPino().getValor()) - (p.getCasaPino().getValor()) < 0) {
@@ -63,19 +63,21 @@ public class Menu extends JPanel {
 						else {
 							if (p.getCasaPino().getTipo()==1) { //casa eh um terreno
 								Terreno casa=(Terreno) p.getCasaPino();
-								p.tiraSaldo(casa.getValor()); //tira o saldo do pino, equivalente ao valor da casa
-								casa.mudaDono(p.getPinoId()); //coloca o novo dono da casa
-								p.aumentaCorTerreno(casa.getCor()); //aumenta a quantidade da cor dessa casa que o pino eh dono
-								String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
+								int valor = casa.getValor() + (casa.getQtdCasas()*casa.getValorConstroiCasa()) + (casa.getQtdHoteis()*casa.getValorConstroiHotel());
+								p.aumentaSaldo((valor*90)/100); //vende por 90% do valor da casa + casas + hoetel
+								casa.mudaDono(-1); //coloca a casa sem dono
+								p.diminuiCorTerreno(casa.getCor()); //diminui a quantidade da cor dessa casa que o pino eh dono
+								casa.zeraCasasHotel();//zera a quantidade de casas/hotel nessa casa
+								String msg=String.format("Venda feita! Novo saldo: %d",p.getSaldo());
 				     			JOptionPane.showMessageDialog(t,msg);
 								m.atualizaBotoes(ctrl, t);
 								t.repaint();
 							}
 							else { //casa eh uma empresa
 								Empresa casa=(Empresa) p.getCasaPino();
-								p.tiraSaldo(casa.getValor()); //tira o saldo do pino, equivalente ao valor da casa
-								casa.mudaDono(p.getPinoId()); //coloca o novo dono da casa
-								String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
+								p.aumentaSaldo((casa.getValor()*90)/100); //aumenta o saldo do pino, equivalente a 90% do valor da casa
+								casa.mudaDono(-1); //coloca o novo dono da casa
+								String msg=String.format("Venda feita! Novo saldo: %d",p.getSaldo());
 				     			JOptionPane.showMessageDialog(t,msg);
 								m.atualizaBotoes(ctrl, t);
 								t.repaint();
@@ -84,6 +86,36 @@ public class Menu extends JPanel {
 					}
 			  }
 		} );
+		
+		//Cria um ActionListener para o botao "comprar propriedade"
+				propriedade.addActionListener(new ActionListener() { 
+					  public void actionPerformed(ActionEvent e) {
+						  Object[] options = { "Confirmar", "Cancelar" };
+							int opcao = JOptionPane.showOptionDialog(t, "Deseja comprar esta propriedade?", "Confirmar compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+							if(opcao==0) {
+								Pino p = t.getPinoDaVez();
+								if (p.getCasaPino().getTipo()==1) { //casa eh um terreno
+									Terreno casa=(Terreno) p.getCasaPino();
+									p.tiraSaldo(casa.getValor()); //tira o saldo do pino, equivalente ao valor da casa
+									casa.mudaDono(p.getPinoId()); //coloca o novo dono da casa
+									p.aumentaCorTerreno(casa.getCor()); //aumenta a quantidade da cor dessa casa que o pino eh dono
+									String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
+						     		JOptionPane.showMessageDialog(t,msg);
+									m.atualizaBotoes(ctrl, t);
+									t.repaint();
+								}
+								else { //casa eh uma empresa
+									Empresa casa=(Empresa) p.getCasaPino();
+									p.tiraSaldo(casa.getValor()); //tira o saldo do pino, equivalente ao valor da casa
+									casa.mudaDono(p.getPinoId()); //coloca o novo dono da casa
+									String msg=String.format("Compra feita! Novo saldo: %d",p.getSaldo());
+						     		JOptionPane.showMessageDialog(t,msg);
+									m.atualizaBotoes(ctrl, t);
+									t.repaint();
+								}
+							}
+					  }
+				} );
 		
 		//Cria um ActionListener para o botao "construir casa"
 		bcasa.addActionListener(new ActionListener() { 
@@ -203,10 +235,10 @@ public class Menu extends JPanel {
 	public void atualizaBotoes(Fachada ctrl, Tabuleiro t) {
 		Pino p = t.getPinoDaVez();
 
-		salvar.setEnabled(false);
+		vender.setEnabled(false);
 		bcasa.setEnabled(false);
 		hotel.setEnabled(false);
-		terreno.setEnabled(false);
+		propriedade.setEnabled(false);
 		/*
 		this.add(bcasa);
 		this.add(hotel);
@@ -219,7 +251,7 @@ public class Menu extends JPanel {
 		//Verifica se o botao de comprar terreno esta habilitado ou nao
 		System.out.printf("Pino da vez: %d, casa: %d, tipo casa: %d, dono casa: %d\n",ctrl.getVez(), p.getCasaPino().getIDCasa(),p.getCasaPino().getTipo(),p.getCasaPino().getDono());
 		if ((p.getCasaPino().getTipo()==1 && p.getCasaPino().getDono() == -1) || (p.getCasaPino().getTipo()==2 && p.getCasaPino().getDono() == -1)) {
-			terreno.setEnabled(true);
+			propriedade.setEnabled(true);
 		}
 		/* verifica se pino pode construir casa */
 		if ((p.getCasaPino().getTipo()==1) && (p.getCasaPino().getDono()==p.getPinoId())) {
@@ -240,16 +272,21 @@ public class Menu extends JPanel {
 			}
 		}
 		
+		/* verifica se pino pode vender casa */
+		if (((p.getCasaPino().getTipo()==1) || (p.getCasaPino().getTipo()==2)) && (p.getCasaPino().getDono()==p.getPinoId())) {
+			vender.setEnabled(true);
+		}
+		
 		this.repaint();
 		this.revalidate();
 	}
 	public void exibeBotoes() {
 		turno.setVisible(true);
 		dados.setVisible(true);
-		salvar.setVisible(true);
+		vender.setVisible(true);
 		bcasa.setVisible(true);
 		hotel.setVisible(true);
-		terreno.setVisible(true);
+		propriedade.setVisible(true);
 		acoes.setVisible(true);
 	}
 

@@ -177,6 +177,9 @@ public class Pino {
 	public void aumentaCorTerreno(int i) {
 		donoCor[i]++;
 	}
+	public void diminuiCorTerreno(int i) {
+		donoCor[i]--;
+	}
 	public int getQtdCorTerreno(int i) {
 		return donoCor[i];
 	}
