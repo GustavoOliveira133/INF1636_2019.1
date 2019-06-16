@@ -14,9 +14,12 @@ public class Pino {
 	private int jogada=0; //campo para verificar quantas tentativas o pino fez para tentar sair da prisao
 	private String cor; 
 	private boolean temCartaPrisao = false;
+	private boolean mostraInformacoes = false; //mostra informacoes no tabuleiro do pino selecionado (clickado)
 	private int id;
 	private int saldo = 2458;
 	private Image i=null;
+	private int x; //posicao x que o pino se encontra
+	private int y; //posicao y que o pino se encontra
 	private boolean jaConstruiuCasa=false; //campo para verificar se o pino ja construi casa (no terreno) nesse turno
 	private Casa c;
 	private boolean foiParaPrisao = false;
@@ -46,34 +49,74 @@ public class Pino {
 		return i;
 	}
 	public int getXPino() {
-		if (c.getQtdPinosEntrou()==0)
+		if (c.getQtdPinosEntrou()==0) {
+			x=c.getXCasa();
 			return c.getXCasa();
-		else if(c.getQtdPinosEntrou()==1)
+		}
+		else if(c.getQtdPinosEntrou()==1) {
+			x=c.getXCasa()+35;
 			return (c.getXCasa()+35);
-		else if (c.getQtdPinosEntrou()==2)
+		}
+		else if (c.getQtdPinosEntrou()==2) {
+			x=c.getXCasa()+70;
 			return (c.getXCasa()+70);
-		else if (c.getQtdPinosEntrou()==3)
+		}
+		else if (c.getQtdPinosEntrou()==3) {
+			x=c.getXCasa();
 			return c.getXCasa();
-		else if (c.getQtdPinosEntrou()==4)
+		}
+
+		else if (c.getQtdPinosEntrou()==4) {
+			x=c.getXCasa()+35;
 			return (c.getXCasa()+35);
-		else
+		}
+		else {
+			x=c.getXCasa()+70;
 			return (c.getXCasa()+70);
+		}
 	}
 	public int getYPino() {
-		if (c.getQtdPinosEntrou()==0)
+		if (c.getQtdPinosEntrou()==0) {
+			y=c.getYCasa();
 			return c.getYCasa();
-		else if(c.getQtdPinosEntrou()==1)
+		}	
+		else if(c.getQtdPinosEntrou()==1) {
+			y=c.getYCasa();
 			return c.getYCasa();
-		else if (c.getQtdPinosEntrou()==2)
+		}
+			
+		else if (c.getQtdPinosEntrou()==2) {
+			y=c.getYCasa();
 			return c.getYCasa();
-		else if (c.getQtdPinosEntrou()==3)
+		}
+		
+		else if (c.getQtdPinosEntrou()==3) {
+			y=c.getYCasa()+35;
 			return (c.getYCasa()+35);
-		else if (c.getQtdPinosEntrou()==4)
+		}
+			
+		else if (c.getQtdPinosEntrou()==4) {
+			y=c.getYCasa()+35;
 			return (c.getYCasa()+35);
-		else
+		}
+			
+		else {
+			y=c.getYCasa()+35;
 			return (c.getYCasa()+35);
+		}
 	}
-
+	public int xPino() {
+		return x;
+	}
+	public int yPino() {
+		return y;
+	}
+	public void setX(int x) {
+		this.x=x;
+	}
+	public void setY(int y) {
+		this.y=y;
+	}
 	public void pinoMudouCasa(Casa c) {
 		this.c=c;
 	}
@@ -145,5 +188,14 @@ public class Pino {
 	}
 	public boolean getConstruiuCasa() {
 		return jaConstruiuCasa;
+	}
+	public boolean getMostraInfo() {
+		return mostraInformacoes;
+	}
+	public void setMostraInfo() {
+		mostraInformacoes=true;
+	}
+	public void unsetMostraInfo() {
+		mostraInformacoes=false;
 	}
 }

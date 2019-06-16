@@ -22,7 +22,7 @@ public class Menu extends JPanel {
 
 		m.setBounds(1000, 0, 500, 500);
 		this.add(acoes);
-		acoes.setBounds(150, 20, 300, 20);
+		acoes.setBounds(80, 20, 350, 20);
 
 		this.add(hotel);
 		hotel.setBounds(250,200,150,40);
@@ -42,7 +42,7 @@ public class Menu extends JPanel {
 		this.add(bcasa);
 		bcasa.setBounds(250,100,150,40);
 		
-		acoes.setFont(new Font("Verdana",1,15));
+		acoes.setFont(new Font("Verdana",1,18));
 		acoes.setVisible(false);
 		turno.setVisible(false);
 		dados.setVisible(false);

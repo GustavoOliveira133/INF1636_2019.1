@@ -199,7 +199,7 @@ public class Tabuleiro extends JPanel {
 		((Empresa) casas[7]).setXY(8,222,0); //botijao de gas
 		((Empresa) casas[15]).setXY(593,8,1);//transporte alternativo
 		((Empresa) casas[19]).setXY(872,129,0); //seguranca
-		((Empresa) casas[24]).setXY(872,529,0); //moto-taxi
+		((Empresa) casas[24]).setXY(872,593,0); //moto-taxi
 		((Empresa) casas[31]).setXY(502,872,1);//tv a gato
 		
 		addMouseListener(new MouseListener() {
@@ -213,6 +213,46 @@ public class Tabuleiro extends JPanel {
     			int y=e.getY(); 			
     			String msg=String.format("x=%d y=%d\n",x,y);
      			JOptionPane.showMessageDialog(t,msg);
+    			
+    			//Percorre o vetor de pinos e marca o pino selecionado para mostrar as infos
+     			for(int i=0;i<ctrl.getJogadores();i++) {
+     				if ((x >= (pinos[i].xPino()) && x <= (pinos[i].xPino()+25.0)) && (y >= (pinos[i].yPino()) && y <= (pinos[i].yPino()+35.0)) && (ctrl.getJogadorFalido(i)==0)) {
+        				pinos[i].setMostraInfo();
+     					repaint();
+        			}
+     			}
+     			
+     			//Percorre o vetor de terrenos e empresas e marca o terreno selecionado para mostrar as infos
+     			for(int i=0;i<36;i++) {
+     				if (casas[i].getTipo()==1) {
+     					if (((Terreno) casas[i]).getPos()==0) { //terreno na vertical
+     	  					if (x >= (((Terreno) casas[i]).getX()) && x <= (((Terreno) casas[i]).getX()+120.0) && (y >= (((Terreno) casas[i]).getY())) && y <= (((Terreno) casas[i]).getY()+92.0)) {
+     	  						((Terreno) casas[i]).MostraCarta();
+             					repaint();
+         					}
+     					}
+     					else { //terreno na horizontal
+     						if (x >= (((Terreno) casas[i]).getX()) && x <= (((Terreno) casas[i]).getX()+93.0) && (y >= (((Terreno) casas[i]).getY())) && y <= (((Terreno) casas[i]).getY()+120.0)) {
+     	  						((Terreno) casas[i]).MostraCarta();
+             					repaint();
+         					}
+     					}
+        			}
+     				else if ( casas[i].getTipo()==2) {
+     					if (((Empresa) casas[i]).getPos()==0) { //empresa na vertical
+     	  					if (x >= (((Empresa) casas[i]).getX()) && x <= (((Empresa) casas[i]).getX()+120.0) && (y >= (((Empresa) casas[i]).getY())) && y <= (((Empresa) casas[i]).getY()+92.0)) {
+     	  						((Empresa) casas[i]).MostraCarta();
+             					repaint();
+         					}
+     					}
+     					else { //empresa na horizontal
+     						if (x >= (((Empresa) casas[i]).getX()) && x <= (((Empresa) casas[i]).getX()+93.0) && (y >= (((Empresa) casas[i]).getY())) && y <= (((Empresa) casas[i]).getY()+120.0)) {
+     	  						((Empresa) casas[i]).MostraCarta();
+             					repaint();
+         					}
+     					}
+     				}
+     			}
     		}
     	});
 	}
@@ -225,21 +265,13 @@ public class Tabuleiro extends JPanel {
 		//Pino na prisao, verifica se foi para prisao pela casa "va para prisao" e verifica se pode sair
 		if ((pinos[pinoDaVez].getCasaPino().getTipo()==7) && (pinos[pinoDaVez].getPrisao()==true)) {
 			if (d1 == d2) { /* dados iguais, anda normalmente */
-				int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
 				pinos[pinoDaVez].mudaFoiParaPrisao();
-				d[d1].setFlag();
-				d[d1].setRepetido();
-				repaint();
+				clicouNosDados(d1,d2);
 			}
 			else if (pinos[pinoDaVez].verificaCartaPrisao()==true) { /* dados diferentes e tem a carta saida livre da prisao, anda */
-				int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
 				pinos[pinoDaVez].mudaFoiParaPrisao();
 				pinos[pinoDaVez].gastaCartaPrisao();
-				d[d1].setFlag();
-				d[d2].setFlag();
-				repaint();
+				clicouNosDados(d1,d2);
 			}
 			else if (pinos[pinoDaVez].getQtdJogadas()>=4) { /* excedeu o numero de jogadas possiveis na prisao, paga (ou fali) e anda */
 				if (pinos[pinoDaVez].getSaldo()<50) { //jogador faliu, eh retirado do jogo
@@ -247,14 +279,10 @@ public class Tabuleiro extends JPanel {
 					j=1;
 				}
 				else {
-					int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-					pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
 					pinos[pinoDaVez].mudaFoiParaPrisao();
 					pinos[pinoDaVez].tiraSaldo(50);
 					pinos[pinoDaVez].zeraJogadas();
-					d[d1].setFlag();
-					d[d2].setFlag();
-					repaint();
+					clicouNosDados(d1,d2);
 				}
 			}
 			else { //pino precisa continuar na prisao
@@ -437,6 +465,8 @@ public class Tabuleiro extends JPanel {
 		repaint();
 	}
 	
+	
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D gd2=(Graphics2D) g;       
@@ -455,7 +485,169 @@ public class Tabuleiro extends JPanel {
 			gd2.fillRoundRect(183, 175, 370, 200, 40, 40);
 			*/
 		}
+		int verificaSeClicouPino=0; //vai ser usado para verificar se clicou em um pino (preferencia em relacao ao terreno/empresa)
+		//Verifica se algum pino foi selecionado (para mostrar informacoes no tabuleiro sobre este pino)
+		for(int i=0;i<ctrl.getJogadores();i++) {
+			int countE=0,countT=0; //contador de qtdTerrenos e qtdEmpresas
+			int countLa=0, countVe=0, countAm=0, countRo=0, countAz=0, countVer=0; //contador de cores (laranja, vermelho, amarelo, roxo, azul e verde)
+			
+			if ((pinos[i].getMostraInfo()==true) && (ctrl.getJogadorFalido(i)==0)) {
+				verificaSeClicouPino=1;
+				Color beige=new Color(245,222,179);
+				RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(460, 410, 380, 430, 40, 40);
+		        gd2.setColor(beige);
+		        gd2.fillRoundRect(460, 410, 380, 430, 40, 40);
+		        gd2.setColor(Color.black);
+		        gd2.draw(roundedRectangle);
+		        String info = String.format("Pino selecionado %d (%s):",pinos[i].getPinoId(), pinos[i].getCor());
+		        gd2.setFont(new Font("Verdana",1,15));
+		        gd2.drawString(info, 490,440);
+		        info= String.format("Saldo: R$%d",pinos[i].getSaldo());
+		        gd2.drawString(info, 490,460);
+		        for (int j=0;j<36;j++) {
+		        	if (casas[j].getDono()==pinos[i].getPinoId() && casas[j].getTipo()==1) {
+		        		countT++;
+		        		if (((Terreno) casas[j]).getCor()==0) { //laranja
+		        			countLa++;
+		        		}
+		        		else if (((Terreno) casas[j]).getCor()==1) { //vermelho
+		        			countVe++;
+		        		}
+		        		else if (((Terreno) casas[j]).getCor()==2) { //amarelo
+		        			countAm++;
+		        		}
+		        		else if (((Terreno) casas[j]).getCor()==3) { //roxo
+		        			countRo++;
+		        		}
+		        		else if (((Terreno) casas[j]).getCor()==4) { //azul
+		        			countAz++;
+		        		}
+		        		else { //verde
+		        			countVer++;
+		        		}
+		        	}
+		        	if (casas[j].getDono()==pinos[i].getPinoId() && casas[j].getTipo()==2) {
+		        		countE++;
+		        	}
+		        }
+		        info= String.format("Dono de %d terreno(s):",countT);
+		        gd2.drawString(info, 490,490);
+		        if (countT>0) {
+		        	gd2.drawString("Cor dos terrenos que possui:", 490, 510);
+		        	gd2.setPaint(Color.orange);
+		        	gd2.fillRect(490, 520, 20, 20);
+		        	gd2.setPaint(Color.red);
+		        	gd2.fillRect(610, 520, 20, 20);
+		        	gd2.setPaint(Color.yellow);
+		        	gd2.fillRect(730, 520, 20, 20);
+		        	gd2.setPaint(Color.magenta);
+		        	gd2.fillRect(490, 560, 20, 20);
+		        	gd2.setPaint(Color.blue);
+		        	gd2.fillRect(610, 560, 20, 20);
+		        	gd2.setPaint(Color.green);
+		        	gd2.fillRect(730, 560, 20, 20);
+		        	    
+			        gd2.setPaint(Color.black);
+		        	info= String.format("%d",countLa);
+			        gd2.drawString(info, 515,535);
+		        	info= String.format("%d",countVe);
+			        gd2.drawString(info, 635,535);
+		        	info= String.format("%d",countAm);
+			        gd2.drawString(info, 755,535);
+		        	info= String.format("%d",countRo);
+			        gd2.drawString(info, 515,575);
+		        	info= String.format("%d",countAz);
+			        gd2.drawString(info, 635,575);
+		        	info= String.format("%d",countVer);
+			        gd2.drawString(info, 755,575);
+			        info= String.format("Dono de %d empresa(s)",countE);
+			        gd2.drawString(info, 490,610);
+			        gd2.drawString("Possui a carta 'livre da prisão'?",490,630);
+			        if (pinos[i].verificaCartaPrisao()==true) {
+			        	gd2.drawString("Sim.",750,630);
+			        }
+			        else {
+			        	gd2.drawString("Não",750,630);
+			        }
+		        }
+		        else {
+			        info= String.format("Dono de %d empresa(s)",countE);
+			        gd2.drawString(info, 490,510);
+			        gd2.drawString("Possui a carta 'livre da prisão'?",490,540);
+			        if (pinos[i].verificaCartaPrisao()==true) {
+			        	gd2.drawString("Sim.",750,540);
+			        }
+			        else {
+			        	gd2.drawString("Não",750,540);
+			        }
+		        }
+		        pinos[i].unsetMostraInfo();
+		        break; //sai do for
+			}
+		}
 		
+		
+		//Verifica se algum terreno/empresa foi selecionado (para mostrar informacoes no tabuleiro sobre esta propriedade)
+		if (verificaSeClicouPino==0) { //se tiver clicado no pino, nao ira mostrar a carta da casa/empresa
+			for(int i=0;i<36;i++) {
+				if (casas[i].getTipo()==1) {
+					if(((Terreno) casas[i]).getMostraCarta()==true) { //mostra esse terreno
+						
+						/* Desenha retangulo */
+						Color beige=new Color(245,222,179);
+						RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(460, 410, 380, 430, 40, 40);
+				        gd2.setColor(beige);
+				        gd2.fillRoundRect(460, 410, 380, 430, 40, 40);
+				        gd2.setColor(Color.black);
+				        gd2.draw(roundedRectangle);
+				        gd2.setFont(new Font("Verdana",1,15));
+				        /* *************** */
+				        if (casas[i].getDono()==-1) {
+				        	gd2.drawString("Este terreno não possui dono",490,440);
+				        }
+				        else {
+				        	String dono= String.format("Este terreno pertence ao jogador %d",casas[i].getDono());
+				        	String cor= String.format("(%s)", pinos[casas[i].getDono()-1].getCor());
+				        	String qtdcasas = String.format("Casas: %d", ((Terreno) casas[i]).getQtdCasas());
+				        	String qtdhoteis = String.format("Hoteis: %d", ((Terreno) casas[i]).getQtdHoteis());
+					        gd2.drawString(dono, 490,440);
+					        gd2.drawString(cor, 600, 455);
+					        gd2.drawString(qtdcasas, 490, 780);
+					        gd2.drawString(qtdhoteis, 490, 800);
+				        }
+				        gd2.drawImage(((Terreno) casas[i]).getImage(),550,490,200,260,null);
+				        ((Terreno) casas[i]).unsetCarta();
+				        break; //sai do for
+					}
+				}
+				else if (casas[i].getTipo()==2) {
+					if(((Empresa) casas[i]).getMostraCarta()==true) { //mostra essa empresa
+						/* Desenha retangulo */
+						Color beige=new Color(245,222,179);
+						RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(460, 410, 380, 430, 40, 40);
+				        gd2.setColor(beige);
+				        gd2.fillRoundRect(460, 410, 380, 430, 40, 40);
+				        gd2.setColor(Color.black);
+				        gd2.draw(roundedRectangle);
+				        /* *************** */
+				        gd2.setFont(new Font("Verdana",1,15));
+				        if (casas[i].getDono()==-1) {
+				        	gd2.drawString("Esta empresa não possui dono",490,440);
+				        }
+				        else {
+				        	String dono= String.format("Esta empresa pertence ao jogador %d",casas[i].getDono());
+				        	String cor= String.format("(%s)", pinos[casas[i].getDono()-1].getCor());
+					        gd2.drawString(dono, 490,440);
+					        gd2.drawString(cor, 600, 455);
+				        }
+				        gd2.drawImage(((Empresa) casas[i]).getImage(),550,490,200,260,null);
+				        ((Empresa) casas[i]).unsetCarta();
+				        break; //sai do for
+					}
+				}
+			}
+		}
+
 
 		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
 		for(int i=0;i<ctrl.getJogadores();i++) {
@@ -508,7 +700,7 @@ public class Tabuleiro extends JPanel {
 			gd2.drawString(turno, 150, 180);
 			
 			// pinta o saldo do jogador
-			String saldo = String.format("Saldo do jogador: %d", pinos[ctrl.getVez()-1].getSaldo());
+			String saldo = String.format("Saldo do jogador: R$%d", pinos[ctrl.getVez()-1].getSaldo());
 			gd2.setColor(Color.black);
 			gd2.drawString(saldo, 150, 230);
 			gd2.setFont(new Font("Verdana",1,15));
@@ -581,10 +773,10 @@ public class Tabuleiro extends JPanel {
 				}
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==7 && pinos[ctrl.getVez()-1].getPrisao()==false) { //informa que o pino esta na prisao mas nao esta preso
-				gd2.drawString("O pino está na prisao, mas não está preso", 150, 280);
+				gd2.drawString("O pino está na prisão, mas não está preso", 150, 280);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==3) { //informa que o pino esta na casa de sorte/reves
-				gd2.drawString("O pino está na casa das cartas sorte/revés", 150, 280);
+				gd2.drawString("O pino está na casa de cartas sorte/revés", 150, 280);
 			}
 			else if (pinos[ctrl.getVez()-1].getCasaPino().getTipo()==0) { //informa que o pino esta na casa de inicio
 				gd2.drawString("O pino está na casa de início", 150, 280);
