@@ -27,6 +27,7 @@ public class Terreno extends Casa{
 	private int cadaHotel;//valor a ser pago para contruir cada hotel
 	private int posicao; //0 = vertical, 1=horizontal
 	
+	
 	public Terreno (int x, int y, int tipo, int id, int preco, int cor) {
 		super(x,y,tipo,id,preco);
 		this.cor=cor;
@@ -45,13 +46,13 @@ public class Terreno extends Casa{
 		else if (qtdCasas==1) {
 			return valorTotalAluguel[1];
 		}
-		else if (qtdCasas==1) {
+		else if (qtdCasas==2) {
 			return valorTotalAluguel[2];
 		}
-		else if (qtdCasas==1) {
+		else if (qtdCasas==3) {
 			return valorTotalAluguel[3];
 		}
-		else if (qtdCasas==1) {
+		else if (qtdCasas==4 && qtdHoteis==0) {
 			return valorTotalAluguel[4];
 		}
 		else {
@@ -112,5 +113,11 @@ public class Terreno extends Casa{
 	}
 	public boolean getMostraCarta() {
 		return mostraCarta;
+	}
+	public int getValorConstroiCasa() {
+		return cadaCasa;
+	}
+	public int getValorConstroiHotel() {
+		return cadaHotel;
 	}
 }

@@ -15,6 +15,7 @@ public class MenuInferior extends JPanel {
 	private static Fachada ctrl=Fachada.getFachada();
 	
 	public MenuInferior(Tabuleiro t,Menu men) {
+		m.setLayout(null);
 		m.setBounds(1000, 500, 500, 500);	
 	//muda a fonte e seu tamanho do JLabel (texto que fala que eh inicio do jogo)
 			inicio.setFont(new Font("Verdana",1,20));
@@ -54,7 +55,7 @@ public class MenuInferior extends JPanel {
 				  public void actionPerformed(ActionEvent e) { 
 					  ctrl.setJogadores(4);
 					  t.criaPinos();
-					  m.atualizaBotoess(ctrl,t,men);				  } 
+					  m.atualizaBotoess(ctrl,t,men);		  } 
 				} );
 			
 
@@ -100,10 +101,10 @@ public class MenuInferior extends JPanel {
 		remove(jogador5);
 		remove(jogador6);
 		remove(inicio);
+		men.exibeBotoes();
 		men.atualizaBotoes(ctrl,t);
 		this.repaint();
 		this.revalidate(); 
-		
 	}
 	
 }

@@ -27,6 +27,7 @@ public class FramePrincipal extends JFrame {
 		int y=sa/2-ALT_TAB_DEFAULT/2;	  
 		
 		/*--------------------------------------------------*/
+		this.setLayout(null);
 		this.setResizable(false);
 		t=new Tabuleiro();
 		t.setLayout(null);

@@ -56,4 +56,7 @@ public class Empresa extends Casa{
 	public void unsetCarta() {
 		mostraCarta = false;
 	}
+	public boolean getMostraCarta() {
+		return mostraCarta;
+	}
 }

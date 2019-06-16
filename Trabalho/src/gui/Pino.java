@@ -17,6 +17,7 @@ public class Pino {
 	private int id;
 	private int saldo = 2458;
 	private Image i=null;
+	private boolean jaConstruiuCasa=false; //campo para verificar se o pino ja construi casa (no terreno) nesse turno
 	private Casa c;
 	private boolean foiParaPrisao = false;
 	private int[] donoCor = {0,0,0,0,0,0}; //campo para a quantidade de terrenos da mesma cor que o pino é dono, sendo:
@@ -135,5 +136,14 @@ public class Pino {
 	}
 	public int getQtdCorTerreno(int i) {
 		return donoCor[i];
+	}
+	public void setConstruiuCasa() {
+		jaConstruiuCasa=true;
+	}
+	public void unsetConstruiuCasa() {
+		jaConstruiuCasa=false;
+	}
+	public boolean getConstruiuCasa() {
+		return jaConstruiuCasa;
 	}
 }

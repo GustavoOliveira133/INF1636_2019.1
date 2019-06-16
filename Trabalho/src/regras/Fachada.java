@@ -26,4 +26,10 @@ public class Fachada {
 	public void acabouTurno() {
 		ctrl.acabouTurno();
 	}
+	public void jogadorFaliu(int i) {
+		ctrl.jogadorFaliu(i);
+	}
+	public int getJogadorFalido (int i) {
+		return ctrl.getJogadorFalido(i);
+	}
 }

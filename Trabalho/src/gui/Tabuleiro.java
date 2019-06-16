@@ -86,7 +86,7 @@ public class Tabuleiro extends JPanel {
 		 */
 		//Construtor (x,y,tipo,idCasa,Preco) - Construtor Terreno (x,y,tipo,idCasa,Preco,Cor)
 		casas[0]=new Casa(20,880,0,0,0); //casa inicial
-		casas[1]=new Terreno(15,800,1,1,220,0); //t curicica
+		casas[1]=new Terreno(15,788,1,1,220,0); //t curicica
 		casas[2]=new Casa(15,695,3,2,0);
 		casas[3]=new Empresa(15,600,2,3,200);
 		casas[4]=new Terreno(15,505,1,4,300,1); //t leme
@@ -217,9 +217,10 @@ public class Tabuleiro extends JPanel {
     	});
 	}
 	
-	public void clicouNosDados(int d1, int d2) {
+	public int clicouNosDados(int d1, int d2) { //se retornar 1, o jogador faliu
 		//Pintar os dados no tabuleiro
 		int pinoDaVez=ctrl.getVez()-1;
+		int j=0; //vai retornar 0 se ngm falir
 		
 		//Pino na prisao, verifica se foi para prisao pela casa "va para prisao" e verifica se pode sair
 		if ((pinos[pinoDaVez].getCasaPino().getTipo()==7) && (pinos[pinoDaVez].getPrisao()==true)) {
@@ -240,15 +241,21 @@ public class Tabuleiro extends JPanel {
 				d[d2].setFlag();
 				repaint();
 			}
-			else if (pinos[pinoDaVez].getQtdJogadas()>=4) { /* excedeu o numero de jogadas possiveis na prisao, paga e anda */
-				int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
-				pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
-				pinos[pinoDaVez].mudaFoiParaPrisao();
-				pinos[pinoDaVez].tiraSaldo(50);
-				pinos[pinoDaVez].zeraJogadas();
-				d[d1].setFlag();
-				d[d2].setFlag();
-				repaint();
+			else if (pinos[pinoDaVez].getQtdJogadas()>=4) { /* excedeu o numero de jogadas possiveis na prisao, paga (ou fali) e anda */
+				if (pinos[pinoDaVez].getSaldo()<50) { //jogador faliu, eh retirado do jogo
+					jogadorFaliu(pinoDaVez);
+					j=1;
+				}
+				else {
+					int casaNova = pinos[pinoDaVez].getIdCasaPino() + d1 + d2 + 2;
+					pinos[pinoDaVez].pinoMudouCasa(casas[casaNova]);
+					pinos[pinoDaVez].mudaFoiParaPrisao();
+					pinos[pinoDaVez].tiraSaldo(50);
+					pinos[pinoDaVez].zeraJogadas();
+					d[d1].setFlag();
+					d[d2].setFlag();
+					repaint();
+				}
 			}
 			else { //pino precisa continuar na prisao
 				d[d1].setFlag();
@@ -279,8 +286,14 @@ public class Tabuleiro extends JPanel {
 				pinos[pinoDaVez].aumentaSaldo(200);
 			}
 			if (casaNova == 34) { //casa nova = evento pague x
-				JOptionPane.showMessageDialog(t,"Voce perdeu R$200!");
-				pinos[pinoDaVez].tiraSaldo(200);
+				if (pinos[pinoDaVez].getSaldo()<200) { //jogador faliu, eh retirado do jogo
+					jogadorFaliu(pinoDaVez);
+					j=1;
+				}
+				else {
+					JOptionPane.showMessageDialog(t,"Voce perdeu R$200!");
+					pinos[pinoDaVez].tiraSaldo(200);
+				}
 			}
 
 			if (pinos[pinoDaVez].getCasaPino().getTipo()==3) { //pino foi para casa de sorte/reves
@@ -294,16 +307,28 @@ public class Tabuleiro extends JPanel {
 				}
 				else if (cartasSR[carta].getTipo() == 1) { //carta reves
 					int valorModificar = cartasSR[carta].valorModificarSaldo();
-					pinos[pinoDaVez].tiraSaldo(valorModificar);
-					String msg=String.format("Você teve azar e perdeu: R$%d",valorModificar);
-	     			JOptionPane.showMessageDialog(t,msg);
+					if (valorModificar > pinos[pinoDaVez].getSaldo()) { //jogador faliu, eh retirado do jogo
+						jogadorFaliu(pinoDaVez);
+						j=1;
+					}
+					else {
+						pinos[pinoDaVez].tiraSaldo(valorModificar);
+						String msg=String.format("Você teve azar e perdeu: R$%d",valorModificar);
+		     			JOptionPane.showMessageDialog(t,msg);
+					}
 				}
 				else if (cartasSR[carta].getTipo() == 2) { //carta sorte receba de cada um
 					int valorModificar = (ctrl.getJogadores()-1) * 50; //50 de cada outro jogador
 					pinos[pinoDaVez].aumentaSaldo(valorModificar);
 					for (int i=0;i<ctrl.getJogadores();i++) {
 						if (i!=pinoDaVez) {
-							pinos[i].tiraSaldo(50);
+							if (pinos[i].getSaldo()<50) { //jogador i faliu, eh retirado do jogo
+								jogadorFaliu(i);
+								j=1;
+							}
+							else {
+								pinos[i].tiraSaldo(50);
+							}
 						}							
 					}
 					String msg=String.format("Você teve sorte e recebeu: R$%d, todos os outros jogadores perderam R$50",valorModificar);
@@ -324,32 +349,38 @@ public class Tabuleiro extends JPanel {
 	     			JOptionPane.showMessageDialog(t,"Você foi para a prisão!!");
 				}
 			}
-			//prepara para mostrar a carta de terreno/empresa, caso seja uma nova casa deste tipo
-			if (casas[casaNova].getTipo()==1) {
-				((Terreno) casas[casaNova]).MostraCarta();
-			}
-			if (casas[casaNova].getTipo()==2) {
-				((Empresa) casas[casaNova]).MostraCarta();
-			}
 			
 			//pino foi para terreno de outro dono (pagamento)
 			if ((casas[casaNova].getTipo()==1) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { 
 				int valor = ((Terreno) casas[casaNova]).getValorAluguel(); //valor de aluguel a ser pago (com casas ou hotel, se tiver)
-				pinos[pinoDaVez].tiraSaldo(valor); //tira do pino da vez o valor a ser pago
-				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valor); //soma o valor a ser pago no saldo do dono da casa
-				String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valor,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
-     			JOptionPane.showMessageDialog(t,msg);
+				if (valor > pinos[pinoDaVez].getSaldo()) { //jogador faliu, eh retirado do jogo
+					jogadorFaliu(pinoDaVez);
+					j=1;
+				}
+				else {
+					pinos[pinoDaVez].tiraSaldo(valor); //tira do pino da vez o valor a ser pago
+					pinos[casas[casaNova].getDono()-1].aumentaSaldo(valor); //soma o valor a ser pago no saldo do dono da casa
+					String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valor,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
+	     			JOptionPane.showMessageDialog(t,msg);
+				}
 			}
+			
 			//pino foi para empresa de outras pessoa (pagamento)
 			if ((casas[casaNova].getTipo()==2) && (casas[casaNova].getDono()!=-1) && (casas[casaNova].getDono()!=pinos[pinoDaVez].getPinoId())) { 
 				int valorPagar = ((Empresa) casas[casaNova]).getMulti() * (d1+d2+2);
-				pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
-				pinos[casas[casaNova].getDono()-1].aumentaSaldo(valorPagar);
-				String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valorPagar,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
-     			JOptionPane.showMessageDialog(t,msg);
+				if (valorPagar > pinos[pinoDaVez].getSaldo()) { //jogador faliu, eh retirado do jogo
+					jogadorFaliu(pinoDaVez);
+					j=1;
+				}
+				else {
+					pinos[pinoDaVez].tiraSaldo(valorPagar); //retira do pino da vez o valor tirado nos dados * multi
+					pinos[casas[casaNova].getDono()-1].aumentaSaldo(valorPagar);
+					String msg=String.format("Você pagou R$%d para o jogador %d (%s)",valorPagar,casas[casaNova].getDono(),pinos[casas[casaNova].getDono()-1].getCor());
+	     			JOptionPane.showMessageDialog(t,msg);
+				}
 			}
 		}
-		
+		if (d1>0 && d2>0 && d1<=6 && d2 <=6) {
 			if(d1!=d2) {
 				d[d1].setFlag();
 				t.repaint();
@@ -359,7 +390,10 @@ public class Tabuleiro extends JPanel {
 				d[d1].setFlag();
 				d[d1].setRepetido();
 			}
-			repaint();
+			
+		}
+		repaint();
+		return j;
 		}
 		
 	
@@ -425,17 +459,18 @@ public class Tabuleiro extends JPanel {
 
 		//Pinta os pinos no tabuleiro de acordo com a quantidade de jogadores
 		for(int i=0;i<ctrl.getJogadores();i++) {
-			if (ctrl.getVez()==(i+1)) {
+			if (ctrl.getVez()==(i+1) && ctrl.getJogadorFalido(i)==0) {
 				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
 				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino()-3,pinos[i].getYPino(),30,40,null);
 			}
-			else {
+			else if (ctrl.getJogadorFalido(i)==0){
 				gd2.drawImage(pinos[i].getImage(),pinos[i].getXPino(),pinos[i].getYPino(),null);
 			}
 			pinos[i].aumentaEntrou();
 		}
 		for(int i=0;i<ctrl.getJogadores();i++) {
-			pinos[i].zeraEntrou();
+			if (ctrl.getJogadorFalido(i)==0)
+				pinos[i].zeraEntrou();
 		}
 		
 		//Pinta a carta de sorte ou reves tirada
@@ -597,5 +632,12 @@ public class Tabuleiro extends JPanel {
 	public static int sorteiaCarta() {
 		return aleatorio.nextInt(31);
 	}
-	
+	public void jogadorFaliu(int i) {
+		ctrl.jogadorFaliu(i);
+		String fimJogo=String.format("Você faliu! Fim de jogo para o pino %d (%s)!",i,pinos[i].getCor());
+		JOptionPane.showMessageDialog(t,fimJogo);
+		pinos[i].zeraEntrou();
+		ctrl.acabouTurno();
+		repaint();
+	}
 }
