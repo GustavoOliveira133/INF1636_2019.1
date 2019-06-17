@@ -826,6 +826,19 @@ public class Tabuleiro extends JPanel {
 	}
 	public void jogadorFaliu(int i) {
 		ctrl.jogadorFaliu(i);
+		for (int j=0;j<casas.length;j++) { //percorre as casas para ver se o pino era dono de alguma (agora sem dono)
+			if (casas[i].getTipo()==1) {
+				if (casas[i].getDono()==pinos[i].getPinoId()) {
+					casas[i].mudaDono(-1);
+					((Terreno) casas[i]).zeraCasasHotel();
+				}
+			}
+			else if (casas[i].getTipo()==2) {
+				if (casas[i].getDono()==pinos[i].getPinoId()) {
+					casas[i].mudaDono(-1);
+				}
+			}
+		}
 		String fimJogo=String.format("Você faliu! Fim de jogo para o pino %d (%s)!",i,pinos[i].getCor());
 		JOptionPane.showMessageDialog(t,fimJogo);
 		pinos[i].zeraEntrou();
