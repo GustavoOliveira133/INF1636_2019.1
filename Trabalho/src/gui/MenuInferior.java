@@ -3,6 +3,7 @@ import javax.swing.*;
 import regras.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class MenuInferior extends JPanel {
 	private MenuInferior m=this;
@@ -86,6 +87,17 @@ public class MenuInferior extends JPanel {
 					  m.atualizaBotoess(ctrl,t,men);				  } 
 				} );
 			
+			salvar.addActionListener(new ActionListener() { 
+				  public void actionPerformed(ActionEvent e) {
+					  //guarda em ctrl a quantidade de jogadores
+					  try {
+						ctrl.saveGame();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				  } 
+				} );
 			
 			
 			

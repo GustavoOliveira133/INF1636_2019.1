@@ -1,5 +1,7 @@
 package regras;
+import java.io.IOException;
 
+import gui.*;
 public class Fachada {
 	Controlador ctrl;
 	static Fachada f= null;
@@ -31,5 +33,14 @@ public class Fachada {
 	}
 	public int getJogadorFalido (int i) {
 		return ctrl.getJogadorFalido(i);
+	}
+	public Pino[] getPinos() {
+		return ctrl.getPinos();
+	}
+	public Casa[] getCasas() {
+		return ctrl.getCasas();
+	}
+	public void saveGame() throws IOException {
+		ctrl.saveGame();
 	}
 }
