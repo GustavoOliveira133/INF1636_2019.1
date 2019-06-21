@@ -18,6 +18,7 @@ public class Menu extends JPanel {
 	private int d[]=new int [2];
 	private static Fachada ctrl=Fachada.getFachada();
 	
+	
 	public Menu(Tabuleiro t) {
 
 		m.setBounds(1000, 0, 500, 500);
@@ -91,7 +92,7 @@ public class Menu extends JPanel {
 				propriedade.addActionListener(new ActionListener() { 
 					  public void actionPerformed(ActionEvent e) {
 						  Object[] options = { "Confirmar", "Cancelar" };
-							int opcao = JOptionPane.showOptionDialog(t, "Deseja comprar esta propriedade?", "Confirmar compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+							 int opcao = JOptionPane.showOptionDialog(t, "Deseja comprar esta propriedade?", "Confirmar compra", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 							if(opcao==0) {
 								Pino p = t.getPinoDaVez();
 								if (p.getCasaPino().getTipo()==1) { //casa eh um terreno
@@ -171,6 +172,7 @@ public class Menu extends JPanel {
 					ctrl.acabouTurno();
 					m.atualizaBotoes(ctrl,t);
 					dados.setEnabled(true);
+					turno.setEnabled(false);
 					t.repaint();
 				}
 			  }
@@ -210,6 +212,7 @@ public class Menu extends JPanel {
   					m.atualizaBotoes(ctrl,t);
   					if (c!=1)
   						dados.setEnabled(false);
+  						turno.setEnabled(true);
   					
   				}
 			  }
@@ -222,7 +225,7 @@ public class Menu extends JPanel {
     		public void mouseReleased(MouseEvent e) {}
     		public void mouseExited(MouseEvent e) {}
     		public void mouseClicked(MouseEvent e) {
-/* *********** Mostrar coordenadas ****************************  */
+/* **** Mostrar coordenadas ***********  */
     			int x=e.getX();
     			int y=e.getY();
     			String msg=String.format("x=%d y=%d\n",x,y);
@@ -234,7 +237,7 @@ public class Menu extends JPanel {
 	
 	public void atualizaBotoes(Fachada ctrl, Tabuleiro t) {
 		Pino p = t.getPinoDaVez();
-
+		turno.setEnabled(false);
 		vender.setEnabled(false);
 		bcasa.setEnabled(false);
 		hotel.setEnabled(false);
@@ -252,6 +255,8 @@ public class Menu extends JPanel {
 		System.out.printf("Pino da vez: %d, casa: %d, tipo casa: %d, dono casa: %d\n",ctrl.getVez(), p.getCasaPino().getIDCasa(),p.getCasaPino().getTipo(),p.getCasaPino().getDono());
 		if ((p.getCasaPino().getTipo()==1 && p.getCasaPino().getDono() == -1) || (p.getCasaPino().getTipo()==2 && p.getCasaPino().getDono() == -1)) {
 			propriedade.setEnabled(true);
+			turno.setEnabled(true);
+
 		}
 		/* verifica se pino pode construir casa */
 		if ((p.getCasaPino().getTipo()==1) && (p.getCasaPino().getDono()==p.getPinoId())) {
@@ -261,11 +266,15 @@ public class Menu extends JPanel {
 				if (estaCasa.getQtdCasas()<4) {
 					if (p.getConstruiuCasa()==false) {
 						bcasa.setEnabled(true);
+						turno.setEnabled(true);
+
 					}
 				}		
 				else {
 					if (estaCasa.getQtdHoteis()<1) {
 						hotel.setEnabled(true);	
+						turno.setEnabled(true);
+
 					}
 				}
 					
@@ -275,7 +284,10 @@ public class Menu extends JPanel {
 		/* verifica se pino pode vender casa */
 		if (((p.getCasaPino().getTipo()==1) || (p.getCasaPino().getTipo()==2)) && (p.getCasaPino().getDono()==p.getPinoId())) {
 			vender.setEnabled(true);
+			turno.setEnabled(true);
+
 		}
+		
 		
 		this.repaint();
 		this.revalidate();
