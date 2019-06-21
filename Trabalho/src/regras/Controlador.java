@@ -1,6 +1,8 @@
 package regras;
 import java.io.IOException;
 
+import javax.swing.JButton;
+
 import gui.*;
 
 class Controlador {
@@ -226,8 +228,8 @@ class Controlador {
 	public Casa[] getCasas() {
 		return casas;
 	}
-	public void saveGame() throws IOException {
-		Save.guardaInfo(quantidadeJogadores,jogadoresFalidos,vez,pinos,casas);
+	public void saveGame(JButton salvar) throws IOException {
+		Save.guardaInfo(salvar,quantidadeJogadores,jogadoresFalidos,vez,pinos,casas);
 	}
 }
 

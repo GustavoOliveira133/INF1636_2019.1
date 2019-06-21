@@ -1,6 +1,8 @@
 package regras;
 import java.io.IOException;
 
+import javax.swing.JButton;
+
 import gui.*;
 public class Fachada {
 	Controlador ctrl;
@@ -40,7 +42,7 @@ public class Fachada {
 	public Casa[] getCasas() {
 		return ctrl.getCasas();
 	}
-	public void saveGame() throws IOException {
-		ctrl.saveGame();
+	public void saveGame(JButton salvar) throws IOException {
+		ctrl.saveGame(salvar);
 	}
 }

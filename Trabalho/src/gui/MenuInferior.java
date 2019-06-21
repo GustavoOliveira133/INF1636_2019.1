@@ -91,7 +91,7 @@ public class MenuInferior extends JPanel {
 				  public void actionPerformed(ActionEvent e) {
 					  //guarda em ctrl a quantidade de jogadores
 					  try {
-						ctrl.saveGame();
+						ctrl.saveGame(salvar);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
