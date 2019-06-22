@@ -27,57 +27,49 @@ public class Save {
 	      }
 	      if (!file.getName().toLowerCase().endsWith(".txt")) {
 	        file = new File(file.getParentFile(), file.getName() + ".txt");
-	      }
-			OutputStream output = null;
+	      }  
+	      PrintWriter output = null;
+
 			try {
-				output = new FileOutputStream(file);	
-				output.write(vez);
+				output = new PrintWriter(new FileWriter(file));
+
+				output.println(quantidadeJogadores);
+				output.println(vez);
 				
 				for(int i=0;i<quantidadeJogadores;i++) {
-					if (jogadoresFalidos[i] == 1){
-						
-					}
-					else {
-						
-						output.write(pinos[i].getPinoId());
-						output.write(',');
-						output.write(pinos[i].getSaldo());
-						output.write(',');
-						output.write(pinos[i].xPino());
-						output.write(',');
-						output.write(pinos[i].getYPino());
-						//verificar se é o dono da casa
-						for(int j=0;j<36;j++) 
-						{
-							if(casas[j].getDono() == i && casas[j].getTipo() == 1) {
-							output.write(casas[j].getIDCasa());
-							output.write('.');
-							output.write(((Terreno) casas[j]).getQtdCasas());	
-							output.write('.');
-							output.write(((Terreno) casas[j]).getQtdHoteis());
-							output.write(',');}
-							
-						}
+					if (jogadoresFalidos[i] != 1){
+						output.printf("%d %d %d %d ",pinos[i].getPinoId(),pinos[i].getSaldo(),pinos[i].xPino(),pinos[i].getYPino());
+
 						if(pinos[i].verificaCartaPrisao() == true)
 						{
-							output.write('/');
-							output.write(1);
-							output.write('/');
+							output.printf("/1/ ");
+						}
+						else {
+							output.printf("/0/ ");
 						}
 						if(pinos[i].getPrisao() == true) {
-							output.write('/');
-							output.write(2);
-							output.write('/');
+							output.printf("/2/");
 						}
-						output.write(';');
-
-					}
-					
+						else {
+							output.printf("/0/");
+						}
+						output.printf(";");
+						output.println("");
 					}
 				}
+				for(int i=0;i<quantidadeJogadores;i++) {
+					for(int j=0;j<36;j++) {
+						if(casas[j].getDono() == i+1 && casas[j].getTipo() == 1) {
+							output.printf("|%d %d %d|",casas[j].getIDCasa(),((Terreno) casas[j]).getQtdCasas(),((Terreno) casas[j]).getQtdHoteis());
+						}	
+					}
+				}
+				output.println("");
+				for (int i=0;i<quantidadeJogadores;i++) {
+					output.printf("%d ",jogadoresFalidos[i]);
+				}
 
-
-			
+			}	
 			catch (IOException e1) {
 				e1.printStackTrace();
 			}
