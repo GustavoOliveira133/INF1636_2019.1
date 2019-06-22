@@ -154,7 +154,7 @@ public class Tabuleiro extends JPanel {
 						j=1;
 					}
 					else {
-						j=2; //jogo acabou
+						return 2; //jogo acabou
 					}
 				}
 				else {
@@ -198,7 +198,7 @@ public class Tabuleiro extends JPanel {
 						j=1;
 					}
 					else {
-						j=2; //jogo acabou
+						return 2; //jogo acabou
 					}
 				}
 				else {
@@ -223,7 +223,7 @@ public class Tabuleiro extends JPanel {
 							j=1;
 						}
 						else {
-							j=2; //jogo acabou
+							return 2; //jogo acabou
 						}
 					}
 					else {
@@ -242,7 +242,7 @@ public class Tabuleiro extends JPanel {
 									j=1;
 								}
 								else {
-									j=2; //jogo acabou
+									return 2; //jogo acabou
 								};
 							}
 							else {
@@ -277,7 +277,7 @@ public class Tabuleiro extends JPanel {
 						j=1;
 					}
 					else {
-						j=2; //jogo acabou
+						return 2; //jogo acabou
 					}
 				}
 				else {
@@ -296,7 +296,7 @@ public class Tabuleiro extends JPanel {
 						j=1;
 					}
 					else {
-						j=2; //jogo acabou
+						return 2; //jogo acabou
 					}
 				}
 				else {
@@ -711,8 +711,6 @@ public class Tabuleiro extends JPanel {
 			return 0;
 		}
 		else { //jogador faliu e acabou o jogo
-			ctrl.verificaGanhador();
-			ctrl.novoJogo();
 			return 1;
 		}
 	}

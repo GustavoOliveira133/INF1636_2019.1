@@ -18,12 +18,41 @@ public class Menu extends JPanel {
 	JButton bcasa = new JButton("Construir Casa");
 	JButton hotel = new JButton("Contruir Hotel");
 	JButton salvar = new JButton("Salvar Jogo");
+	private JButton jogador2=new JButton("2 jogadores");
+	private JButton jogador3=new JButton("3 jogadores");
+	private JButton jogador4=new JButton("4 jogadores");
+	private JButton jogador5=new JButton("5 jogadores");
+	private JButton jogador6=new JButton("6 jogadores");
+	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
+	JButton acabar = new JButton("Acabar Jogo");
+	JButton carregar = new JButton("Carregar Jogo");
 	private int d[]=new int [2];
 	private static Fachada ctrl=Fachada.getFachada();
 	
 	public Menu(Tabuleiro t) {
+		m.setBounds(1000, 0, 500, 1000);
+		
+		//muda a fonte e seu tamanho do JLabel (texto que fala que eh inicio do jogo)
+		inicio.setFont(new Font("Verdana",1,20));
+		inicio.setBounds(30, 0, 400, 100);
+		m.add(inicio);
+		//ajustando as posições dos componentes do menu
+		jogador2.setBounds(50, 80,150, 40);
+		jogador3.setBounds(260, 80,150, 40);
+		jogador4.setBounds(50, 160,150, 40);
+		jogador5.setBounds(260, 160,150, 40);
+		jogador6.setBounds(150, 240,150, 40);
+		
 
-		m.setBounds(1000, 0, 500, 500);
+		this.add(acabar);
+		acabar.setBounds(150, 410,150, 50);
+		
+		this.add(carregar);
+		carregar.setBounds(150, 550,150, 60);
+		
+		this.add(salvar);
+		salvar.setBounds(150,700,150,60);
+			
 		this.add(acoes);
 		acoes.setBounds(80, 20, 350, 20);
 
@@ -41,14 +70,12 @@ public class Menu extends JPanel {
 
 		this.add(propriedade);
 		propriedade.setBounds(50,300,160,40);
-		
-		this.add(salvar);
-		salvar.setBounds(150,400,160,60);
 
 		this.add(bcasa);
 		bcasa.setBounds(250,100,160,40);
 		
 		acoes.setFont(new Font("Verdana",1,18));
+		acabar.setVisible(false);
 		acoes.setVisible(false);
 		salvar.setVisible(false);
 		turno.setVisible(false);
@@ -57,6 +84,67 @@ public class Menu extends JPanel {
 		bcasa.setVisible(false);
 		hotel.setVisible(false);
 		propriedade.setVisible(false);
+		
+		//adiciona o botao para escolher 2 jogadores
+		this.add(jogador2);
+		//adiciona o action listener no botao 2 jogadores
+		jogador2.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				  //guarda em ctrl a quantidade de jogadores
+				  ctrl.setJogadores(2);
+				  t.criaPinos();
+				  m.atualizaBotoess(ctrl,t);
+			  } 
+			} );
+		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
+		this.add(jogador3);
+
+		jogador3.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  ctrl.setJogadores(3);
+				  t.criaPinos();
+				  m.atualizaBotoess(ctrl,t);				  } 
+			} );
+		
+
+		this.add(jogador4);
+		jogador4.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  ctrl.setJogadores(4);
+				  t.criaPinos();
+				  m.atualizaBotoess(ctrl,t);		  } 
+			} );
+		
+
+		this.add(jogador5);
+		jogador5.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  ctrl.setJogadores(5);
+				  t.criaPinos();
+				  m.atualizaBotoess(ctrl,t);				  } 
+			} );
+		
+		this.add(jogador6);
+		jogador6.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) { 
+				  ctrl.setJogadores(6);
+				  t.criaPinos();
+				  m.atualizaBotoess(ctrl,t);				  } 
+			} );
+		
+		acabar.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				  String msg = ctrl.verificaGanhador();
+				  JOptionPane.showMessageDialog(t,msg);
+				  ctrl.novoJogo();
+				  acabar.setVisible(false);
+				  escondeBotoes();
+				  m.insereBotoesInicio();
+				  t.repaint();
+			  } 
+			} );
+		
+		
 		//Cria um ActionListener para o botao "vender propriedade"
 		vender.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) {
@@ -174,7 +262,6 @@ public class Menu extends JPanel {
 					dados.setEnabled(true);
 					turno.setEnabled(false);
 					salvar.setEnabled(true);
-
 					t.repaint();
 				
 			  }
@@ -196,8 +283,20 @@ public class Menu extends JPanel {
   				    //chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
   					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
   					m.atualizaBotoes(ctrl,t);
-  					if (c!=1)
+  					if (c==0) {
   						dados.setEnabled(false);
+  						turno.setEnabled(true);
+  						salvar.setEnabled(false);
+  					}
+  					else if (c==2) {
+  					  String msg = ctrl.verificaGanhador();
+  					  JOptionPane.showMessageDialog(t,msg);
+  					  ctrl.novoJogo();
+  					  acabar.setVisible(false);
+  					  escondeBotoes();
+  					  m.insereBotoesInicio();
+  					  t.repaint();
+  					}
   					*/
   		
   					//Rola os dois dados e guarda o resultado
@@ -214,8 +313,15 @@ public class Menu extends JPanel {
   						salvar.setEnabled(false);
   					}
   					else if (c==2) {
-  						
+  					  String msg = ctrl.verificaGanhador();
+  					  JOptionPane.showMessageDialog(t,msg);
+  					  ctrl.novoJogo();
+  					  acabar.setVisible(false);
+  					  escondeBotoes();
+  					  m.insereBotoesInicio();
+  					  t.repaint();
   					}
+  					
   				}
 			  
 		} );
@@ -315,5 +421,29 @@ public class Menu extends JPanel {
 	}
 	public void mostraBotaoDado() {
 		dados.setEnabled(true);
+	}
+	public void insereBotoesInicio() {
+		jogador2.setVisible(true);
+		jogador3.setVisible(true);
+		jogador4.setVisible(true);
+		jogador5.setVisible(true);
+		jogador6.setVisible(true);
+		inicio.setVisible(true);
+		acabar.setVisible(false);
+	}
+	public void atualizaBotoess(Fachada ctrl, Tabuleiro t) {
+		jogador2.setVisible(false);
+		jogador3.setVisible(false);
+		jogador4.setVisible(false);
+		jogador5.setVisible(false);
+		jogador6.setVisible(false);
+		inicio.setVisible(false);
+		acabar.setVisible(true);
+		mostraBotaoDado();
+		exibeBotoes();
+		atualizaBotoes(ctrl,t);
+
+		this.repaint();
+		this.revalidate(); 
 	}
 }

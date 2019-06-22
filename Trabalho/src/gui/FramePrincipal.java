@@ -10,7 +10,6 @@ public class FramePrincipal extends JFrame {
 	public final int ALT_MENU_DEFAULT=500;
 	private Tabuleiro t;
 	private Menu m;
-	private MenuInferior menuInf;
 	
 	
 	public FramePrincipal() {
@@ -33,11 +32,8 @@ public class FramePrincipal extends JFrame {
 		t.setLayout(null);
 		m=new Menu(t);
 		m.setLayout(null);
-		menuInf=new MenuInferior(t,m);
-		menuInf.setLayout(null);
 		setBounds(x-300,y,LARG_TAB_DEFAULT+LARG_MENU_DEFAULT,ALT_TAB_DEFAULT);
 		getContentPane().add(m);
-		getContentPane().add(menuInf);
 		getContentPane().add(t);
 		
 		
