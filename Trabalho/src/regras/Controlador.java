@@ -61,12 +61,42 @@ class Controlador {
 			pinos[5]=new Pino("pin5.png",casas[0],"Cinza",6);
 		}
 	}
-	
+	public void setQtdJogadores(int i) {
+		quantidadeJogadores=i;
+	}
+	public void acertaValoresPino(int id, int saldo, int casaPino, int x, int y, int cartaPrisao, int estaPreso, int donoCor[]) {
+		pinos[id].setSaldo(saldo);
+		pinos[id].pinoMudouCasa(casas[casaPino]);
+		pinos[id].setX(x);
+		pinos[id].setY(y);
+		if (cartaPrisao == 1) {
+			pinos[id].recebeCartaPrisao();
+		}
+		if (estaPreso == 2) {
+			pinos[id].mudaFoiParaPrisao();
+		}
+		pinos[id].setQtdCorTerreno(donoCor);
+	}
+	public void acertaValoresCasa(int idCasa,int tipo,int dono,int qtdCasas,int qtdHoteis) {
+		casas[idCasa].mudaDono(dono);
+		if (tipo==1) {
+			for (int i=0;i<qtdCasas;i++) {
+				((Terreno) casas[idCasa]).construiuCasa();
+			}
+			if (qtdHoteis==1) {
+				((Terreno) casas[idCasa]).construiuHotel();
+			}
+		}
+
+	}
 	public int getJogadores() {
 		return quantidadeJogadores;
 	}
 	public int getVez() {
 		return vez;
+	}
+	public void setVez(int i) {
+		vez = i;
 	}
 	public void acabouTurno() {
 		vez++;
@@ -78,6 +108,11 @@ class Controlador {
 			if (vez>quantidadeJogadores) {
 				vez=1;
 			}
+		}
+	}
+	public void setJogadoresFalidos(int n, int falidos[]) {
+		for (int i=0;i<n;i++) {
+			jogadoresFalidos[i] = falidos[i];
 		}
 	}
 	public int jogadorFaliu(int i) {
@@ -133,6 +168,10 @@ class Controlador {
 	}
 	public void saveGame(JButton salvar) throws IOException {
 		Save.guardaInfo(salvar,quantidadeJogadores,jogadoresFalidos,vez,pinos,casas);
+	}
+	
+	public void loadGame(JButton carregar) throws IOException {
+		Load.carregaInfo(carregar);
 	}
 	
 	public void instanciaCasas() {

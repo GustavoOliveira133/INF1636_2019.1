@@ -35,40 +35,52 @@ public class Save {
 
 				output.println(quantidadeJogadores);
 				output.println(vez);
-				
+
+				for (int i=0;i<quantidadeJogadores;i++) {
+					output.println(jogadoresFalidos[i]);
+				}
 				for(int i=0;i<quantidadeJogadores;i++) {
 					if (jogadoresFalidos[i] != 1){
-						output.printf("%d %d %d %d ",pinos[i].getPinoId(),pinos[i].getSaldo(),pinos[i].xPino(),pinos[i].getYPino());
+						output.println(pinos[i].getPinoId());
+						output.println(pinos[i].getSaldo());
+						output.println(pinos[i].getCasaPino().getIDCasa());
+						output.println(pinos[i].xPino());
+						output.println(pinos[i].yPino());
 
 						if(pinos[i].verificaCartaPrisao() == true)
 						{
-							output.printf("/1/ ");
+							output.println("1");
 						}
 						else {
-							output.printf("/0/ ");
+							output.println("0 ");
 						}
 						if(pinos[i].getPrisao() == true) {
-							output.printf("/2/");
+							output.println("2");
 						}
 						else {
-							output.printf("/0/");
+							output.println("0");
 						}
-						output.printf(";");
-						output.println("");
+						for (int j=0;j<6;j++) {
+							output.println(pinos[i].getQtdCorTerreno(j));
+						}
 					}
 				}
 				for(int i=0;i<quantidadeJogadores;i++) {
 					for(int j=0;j<36;j++) {
 						if(casas[j].getDono() == i+1 && casas[j].getTipo() == 1) {
-							output.printf("|%d %d %d|",casas[j].getIDCasa(),((Terreno) casas[j]).getQtdCasas(),((Terreno) casas[j]).getQtdHoteis());
-						}	
+							output.println(casas[j].getIDCasa());
+							output.println(casas[j].getTipo());
+							output.println(casas[j].getDono());
+							output.println(((Terreno) casas[j]).getQtdCasas());
+							output.println(((Terreno) casas[j]).getQtdHoteis());
+						}
+						else if(casas[j].getDono() == i+1 && casas[j].getTipo() == 2) {
+							output.println(casas[j].getIDCasa());
+							output.println(casas[j].getTipo());
+							output.println(casas[j].getDono());
+						}
 					}
 				}
-				output.println("");
-				for (int i=0;i<quantidadeJogadores;i++) {
-					output.printf("%d ",jogadoresFalidos[i]);
-				}
-
 			}	
 			catch (IOException e1) {
 				e1.printStackTrace();

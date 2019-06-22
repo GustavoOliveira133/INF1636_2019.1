@@ -245,12 +245,25 @@ public class Menu extends JPanel {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				salvar.setEnabled(true);
-
-				
+				salvar.setEnabled(true);		
 				t.repaint();
-					 }
+				
+			  }
 		} );
+		
+		carregar.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				  try {
+					  ctrl.loadGame(carregar);
+					  t.criaCasas();
+					  t.criaPinos();
+					  m.atualizaBotoes(ctrl, t);
+				  } catch (IOException e1) {
+					  e1.printStackTrace();
+				  }
+
+			  } 
+			} );
 		
 		//Cria um ActionListener para o botao "passar o turno"
 		turno.addActionListener(new ActionListener() { 
@@ -393,7 +406,6 @@ public class Menu extends JPanel {
 		if (((p.getCasaPino().getTipo()==1) || (p.getCasaPino().getTipo()==2)) && (p.getCasaPino().getDono()==p.getPinoId())) {
 			vender.setEnabled(true);
 			turno.setEnabled(true);
-
 		}
 		
 		this.repaint();

@@ -28,7 +28,7 @@ public class Tabuleiro extends JPanel {
 			System.exit(1);
 		}
 		//Pega as casas
-		casas=ctrl.getCasas();
+		criaCasas();
 		
 		//Criando as cartas de sorte/reves
 		//sorte
@@ -322,12 +322,6 @@ public class Tabuleiro extends JPanel {
 		repaint();
 		return j;
 		}
-		
-	
-	public void criaPinos() {
-		pinos=ctrl.getPinos();
-		repaint();
-	}
 	
 	
 	
@@ -681,6 +675,13 @@ public class Tabuleiro extends JPanel {
 		}
 	}
 	
+	public void criaPinos() {
+		pinos=ctrl.getPinos();
+		repaint();
+	}
+	public void criaCasas() {
+		casas=ctrl.getCasas();
+	}
 	public Pino getPinoDaVez() {
 		return pinos[ctrl.getVez()-1];
 	}

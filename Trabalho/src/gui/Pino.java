@@ -135,6 +135,9 @@ public class Pino {
 	public int getSaldo() {
 		return saldo;
 	}
+	public void setSaldo(int s) {
+		saldo=s;
+	}
 	public void tiraSaldo(int i) {
 		saldo-=i;
 	}
@@ -182,6 +185,9 @@ public class Pino {
 	}
 	public int getQtdCorTerreno(int i) {
 		return donoCor[i];
+	}
+	public void setQtdCorTerreno(int cor[]) {
+		donoCor = cor;
 	}
 	public void setConstruiuCasa() {
 		jaConstruiuCasa=true;
