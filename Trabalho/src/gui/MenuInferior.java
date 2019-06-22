@@ -4,6 +4,7 @@ import regras.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import gui.*;
 
 public class MenuInferior extends JPanel {
 	private MenuInferior m=this;
@@ -13,9 +14,10 @@ public class MenuInferior extends JPanel {
 	private JButton jogador5=new JButton("5 jogadores");
 	private JButton jogador6=new JButton("6 jogadores");
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
-	JButton salvar = new JButton("Salvar Jogo");
+	JButton acabar = new JButton("Acabar Jogo");
 	JButton carregar = new JButton("Carregar Jogo");
 	private static Fachada ctrl=Fachada.getFachada();
+	
 	
 	public MenuInferior(Tabuleiro t,Menu men) {
 		m.setLayout(null);
@@ -31,11 +33,10 @@ public class MenuInferior extends JPanel {
 			jogador6.setBounds(150, 240,150, 40);
 			
 			//botoes de salvar/carregar
-			salvar.setVisible(false);
-			carregar.setVisible(false);
-			salvar.setBounds(50, 80,150, 40);
-			carregar.setBounds(260, 80,150, 40);
-			this.add(salvar);
+			acabar.setVisible(false);
+			acabar.setBounds(150, 110,150, 60);
+			carregar.setBounds(150, 330,150, 60);
+			this.add(acabar);
 			this.add(carregar);
 			
 			//adiciona o JLabel no painel
@@ -87,15 +88,15 @@ public class MenuInferior extends JPanel {
 					  m.atualizaBotoess(ctrl,t,men);				  } 
 				} );
 			
-			salvar.addActionListener(new ActionListener() { 
+			acabar.addActionListener(new ActionListener() { 
 				  public void actionPerformed(ActionEvent e) {
-					  //guarda em ctrl a quantidade de jogadores
-					  try {
-						ctrl.saveGame(salvar);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					  String msg = ctrl.verificaGanhador();
+					  JOptionPane.showMessageDialog(t,msg);
+					  ctrl.novoJogo();
+					  acabar.setVisible(false);
+					  men.escondeBotoes();
+					  m.insereBotoes();
+					  t.repaint();
 				  } 
 				} );
 			
@@ -107,7 +108,7 @@ public class MenuInferior extends JPanel {
 	    		public void mouseReleased(MouseEvent e) {}
 	    		public void mouseExited(MouseEvent e) {}
 	    		public void mouseClicked(MouseEvent e) {
-	/* *********** Mostrar coordenadas ****************************  */
+	/* **** Mostrar coordenadas ***********  */
 	    			int x=e.getX();
 	    			int y=e.getY();
 	    			String msg=String.format("x=%d y=%d\n",x,y);
@@ -116,21 +117,29 @@ public class MenuInferior extends JPanel {
 	    	});
 			
 		}
-	
+	public void insereBotoes() {
+		jogador2.setVisible(true);
+		jogador3.setVisible(true);
+		jogador4.setVisible(true);
+		jogador5.setVisible(true);
+		jogador6.setVisible(true);
+		inicio.setVisible(true);
+		acabar.setVisible(false);
+	}
 	public void atualizaBotoess(Fachada ctrl, Tabuleiro t, Menu men) {
-		remove(jogador2);
-		remove(jogador3);
-		remove(jogador4);
-		remove(jogador5);
-		remove(jogador6);
-		remove(inicio);
-		salvar.setVisible(true);
-		carregar.setVisible(true);
+		jogador2.setVisible(false);
+		jogador3.setVisible(false);
+		jogador4.setVisible(false);
+		jogador5.setVisible(false);
+		jogador6.setVisible(false);
+		inicio.setVisible(false);
+		acabar.setVisible(true);
+		men.mostraBotaoDado();
 		men.exibeBotoes();
 		men.atualizaBotoes(ctrl,t);
 
 		this.repaint();
 		this.revalidate(); 
-	}
-	
+	}	
+
 }

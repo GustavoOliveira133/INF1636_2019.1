@@ -30,8 +30,8 @@ public class Fachada {
 	public void acabouTurno() {
 		ctrl.acabouTurno();
 	}
-	public void jogadorFaliu(int i) {
-		ctrl.jogadorFaliu(i);
+	public int jogadorFaliu(int i) {
+		return ctrl.jogadorFaliu(i);
 	}
 	public int getJogadorFalido (int i) {
 		return ctrl.getJogadorFalido(i);
@@ -44,5 +44,11 @@ public class Fachada {
 	}
 	public void saveGame(JButton salvar) throws IOException {
 		ctrl.saveGame(salvar);
+	}
+	public String verificaGanhador() {
+		return ctrl.verificaGanhador();
+	}
+	public void novoJogo() {
+		ctrl.novoJogo();
 	}
 }
