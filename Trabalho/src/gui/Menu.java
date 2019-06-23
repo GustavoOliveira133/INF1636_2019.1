@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class Menu extends JPanel {
 	private Menu m=this;
+	private boolean jaMudouBotoes = false;
 	private JButton dados=new JButton("Rolar os dados");
 	private JButton turno=new JButton("Passar o turno");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
@@ -26,12 +27,40 @@ public class Menu extends JPanel {
 	JLabel inicio = new JLabel("Escolha a quantidade de jogadores:");
 	JButton acabar = new JButton("Acabar Jogo");
 	JButton carregar = new JButton("Carregar Jogo");
+	JLabel entreComValor = new JLabel ("Entre com o valor dos dados");
+	JButton ok = new JButton("Ok");
+	JButton aleatorio = new JButton("Aleatorio");
 	private int d[]=new int [2];
 	private static Fachada ctrl=Fachada.getFachada();
 	
 	public Menu(Tabuleiro t) {
 		m.setBounds(1000, 0, 500, 1000);
 		
+		String[] vm={"1","2","3","4","5","6"};
+		JComboBox valores = new JComboBox(vm);
+		JComboBox valores2 = new JComboBox(vm);
+		aleatorio.setLayout(null);
+		valores.setLayout(null);
+		valores.setBounds(50,850,100,40);
+		valores2.setLayout(null);
+		valores2.setBounds(165,850,100,40);
+		aleatorio.setBounds(50,900,150,40);
+		entreComValor.setFont(new Font("Verdana",1,15));
+	  	ok.setLayout(null);
+	  	entreComValor.setLayout(null);
+	  	entreComValor.setBounds(50,800,400,50);
+	  	ok.setBounds(300, 850, 50, 40);
+	  	m.add(aleatorio);
+	    m.add(entreComValor);
+	    m.add(ok);
+	    m.add(valores);
+	    m.add(valores2);
+	    entreComValor.setEnabled(false);
+	    ok.setEnabled(false);
+		valores.setEnabled(false);
+		valores2.setEnabled(false);
+		aleatorio.setEnabled(false);
+	    
 		//muda a fonte e seu tamanho do JLabel (texto que fala que eh inicio do jogo)
 		inicio.setFont(new Font("Verdana",1,20));
 		inicio.setBounds(30, 0, 400, 100);
@@ -94,6 +123,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(2);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
+				  jaMudouBotoes = true;
 			  } 
 			} );
 		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
@@ -103,7 +133,9 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(3);
 				  t.criaPinos();
-				  m.atualizaBotoess(ctrl,t);				  } 
+				  m.atualizaBotoess(ctrl,t);
+				  jaMudouBotoes = true;
+			  } 
 			} );
 		
 
@@ -112,7 +144,8 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(4);
 				  t.criaPinos();
-				  m.atualizaBotoess(ctrl,t);		  } 
+				  m.atualizaBotoess(ctrl,t);
+				  jaMudouBotoes = true;} 
 			} );
 		
 
@@ -121,7 +154,8 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(5);
 				  t.criaPinos();
-				  m.atualizaBotoess(ctrl,t);				  } 
+				  m.atualizaBotoess(ctrl,t);
+				  jaMudouBotoes = true;} 
 			} );
 		
 		this.add(jogador6);
@@ -129,7 +163,8 @@ public class Menu extends JPanel {
 			  public void actionPerformed(ActionEvent e) { 
 				  ctrl.setJogadores(6);
 				  t.criaPinos();
-				  m.atualizaBotoess(ctrl,t);				  } 
+				  m.atualizaBotoess(ctrl,t);
+				  jaMudouBotoes = true;} 
 			} );
 		
 		acabar.addActionListener(new ActionListener() { 
@@ -140,6 +175,7 @@ public class Menu extends JPanel {
 				  acabar.setVisible(false);
 				  escondeBotoes();
 				  m.insereBotoesInicio();
+				  jaMudouBotoes = false;
 				  t.repaint();
 			  } 
 			} );
@@ -257,7 +293,13 @@ public class Menu extends JPanel {
 					  ctrl.loadGame(carregar);
 					  t.criaCasas();
 					  t.criaPinos();
-					  m.atualizaBotoes(ctrl, t);
+					  if (jaMudouBotoes==false) {
+						  m.atualizaBotoess(ctrl,t);
+						  jaMudouBotoes = true;
+					  }
+					  else {
+						  m.atualizaBotoes(ctrl, t);
+					  }
 				  } catch (IOException e1) {
 					  e1.printStackTrace();
 				  }
@@ -279,62 +321,78 @@ public class Menu extends JPanel {
 				
 			  }
 		} );
+		
+		ok.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+				int d1 = Integer.parseInt((String)valores.getSelectedItem()); 
+				int d2 = Integer.parseInt((String)valores2.getSelectedItem()); 
+				d[0] = d1-1;
+					d[1] = d2-1; 
+					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
+				    //chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
+					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
+					m.atualizaBotoes(ctrl,t);
+					if (c==0) {
+						aleatorio.setEnabled(false);
+						valores.setEnabled(false);
+						valores2.setEnabled(false);
+						dados.setEnabled(false);
+						turno.setEnabled(true);
+						salvar.setEnabled(false);
+					}
+					else if (c==2) {
+					  String msg = ctrl.verificaGanhador();
+					  JOptionPane.showMessageDialog(t,msg);
+					  ctrl.novoJogo();
+					  acabar.setVisible(false);
+					  escondeBotoes();
+					  m.insereBotoesInicio();
+					  t.repaint();
+					}
+			  }
+		} );
+		
+		aleatorio.addActionListener(new ActionListener() { 
+			  public void actionPerformed(ActionEvent e) {
+					//Rola os dois dados e guarda o resultado
+					d[0]=Dados.rolaDados();
+					d[1]=Dados.rolaDados();
+					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
+					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
+					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
+					m.atualizaBotoes(ctrl,t);
+					if (c==0) {
+						aleatorio.setEnabled(false);
+						valores.setEnabled(false);
+						valores2.setEnabled(false);
+						dados.setEnabled(false);
+						turno.setEnabled(true);
+						salvar.setEnabled(false);
+					}
+					else if (c==2) {
+					  String msg = ctrl.verificaGanhador();
+					  JOptionPane.showMessageDialog(t,msg);
+					  ctrl.novoJogo();
+					  acabar.setVisible(false);
+					  escondeBotoes();
+					  m.insereBotoesInicio();
+					  t.repaint();
+					}
+			  }
+		} );
+		
 		//Cria um ActionListener para o botao "rolar os dados"
 		dados.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) {
 				  Pino p = t.getPinoDaVez();
 				  p.unsetConstruiuCasa(); //pino pode voltar a construir casa
-  					
-  					
-  					/* Escolhe dois valores para os dados */
-  					/*
-  					Scanner s = new Scanner( System.in );
-  					System.out.printf("Entre com 2 valores para os dados");
-  					d[0] = s.nextInt()-1;
-  					d[1] = s.nextInt()-1;
-  					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
-  				    //chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
-  					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
-  					m.atualizaBotoes(ctrl,t);
-  					if (c==0) {
-  						dados.setEnabled(false);
-  						turno.setEnabled(true);
-  						salvar.setEnabled(false);
-  					}
-  					else if (c==2) {
-  					  String msg = ctrl.verificaGanhador();
-  					  JOptionPane.showMessageDialog(t,msg);
-  					  ctrl.novoJogo();
-  					  acabar.setVisible(false);
-  					  escondeBotoes();
-  					  m.insereBotoesInicio();
-  					  t.repaint();
-  					}
-  					*/
-  		
-  					//Rola os dois dados e guarda o resultado
-  					
-  					d[0]=Dados.rolaDados();
-  					d[1]=Dados.rolaDados();
-  					System.out.printf("Valor rolado nos dados:%d\n",d[0]+d[1]+2);
-  					//chama o metodo na Classe Tabuleiro, que ira setar as flags e repetidos e mandar repaint
-  					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
-  					m.atualizaBotoes(ctrl,t);
-  					if (c==0) {
-  						dados.setEnabled(false);
-  						turno.setEnabled(true);
-  						salvar.setEnabled(false);
-  					}
-  					else if (c==2) {
-  					  String msg = ctrl.verificaGanhador();
-  					  JOptionPane.showMessageDialog(t,msg);
-  					  ctrl.novoJogo();
-  					  acabar.setVisible(false);
-  					  escondeBotoes();
-  					  m.insereBotoesInicio();
-  					  t.repaint();
-  					}
-  					
+				  aleatorio.setEnabled(true);
+				  valores.setEnabled(true);
+				  valores2.setEnabled(true);
+				    entreComValor.setEnabled(true);
+				    ok.setEnabled(true);
+  				    m.repaint();
+  					m.revalidate();
   				}
 			  
 		} );

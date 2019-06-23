@@ -23,7 +23,7 @@ public class Load {
 		int idCasa,tipo,dono,qtdCasas,qtdHoteis;
 		
 		JFileChooser fileChooser = new JFileChooser();
-	    int retval = fileChooser.showSaveDialog(carregar);
+	    int retval = fileChooser.showOpenDialog(carregar);
 	    if (retval == JFileChooser.APPROVE_OPTION) {
 	      File file = fileChooser.getSelectedFile();
 	      if (file == null) {

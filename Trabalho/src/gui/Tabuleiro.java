@@ -307,7 +307,7 @@ public class Tabuleiro extends JPanel {
 				}
 			}
 		}
-		if (d1>0 && d2>0 && d1<=6 && d2 <=6) {
+		if (d1>=0 && d2>=0 && d1<=6 && d2 <=6) {
 			if(d1!=d2) {
 				d[d1].setFlag();
 				t.repaint();
