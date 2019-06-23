@@ -83,11 +83,9 @@ public class Tabuleiro extends JPanel {
     		public void mouseReleased(MouseEvent e) {}
     		public void mouseExited(MouseEvent e) {}
     		public void mouseClicked(MouseEvent e) {
-    			//Pega as coordenadas do click do mouse e mostra na tela
+    			//Pega as coordenadas do click do mouse 
     			int x=e.getX();
     			int y=e.getY(); 			
-    			String msg=String.format("x=%d y=%d\n",x,y);
-     			JOptionPane.showMessageDialog(t,msg);
     			
     			//Percorre o vetor de pinos e marca o pino selecionado para mostrar as infos
      			for(int i=0;i<ctrl.getJogadores();i++) {

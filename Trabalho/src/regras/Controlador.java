@@ -12,6 +12,7 @@ class Controlador {
 	private int[] jogadoresFalidos;
 	private Pino[] pinos;
 	private Casa[] casas=new Casa[36];
+	private Casa[] casaEspecial=new Casa[6];
 	
 	public Controlador() {
 		instanciaCasas();
@@ -116,9 +117,21 @@ class Controlador {
 		}
 	}
 	public int jogadorFaliu(int i) {
+		casaEspecial[i]=new Casa(413,468,8,100,0);
 		int count=0;
 		jogadoresFalidos[i]=1;
-		
+		for (int j=0;j<casas.length;j++) {
+			if (casas[j].getDono()==i+1) {
+				casas[j].mudaDono(-1);
+				casas[j].saiuPino();
+				pinos[i].setX(-1);
+				pinos[i].setY(-1);
+				pinos[i].pinoMudouCasa(casaEspecial[i]);
+				if (casas[j].getTipo()==1) {
+					((Terreno) casas[j]).zeraCasasHotel();
+				}
+			}
+		}
 		for (int j=0;j<quantidadeJogadores;j++) {
 			count+=jogadoresFalidos[j];
 		}

@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Menu extends JPanel {
 	private Menu m=this;
-	private boolean jaMudouBotoes = false;
+	private boolean telaInicio = true;
 	private JButton dados=new JButton("Rolar os dados");
 	private JButton turno=new JButton("Passar o turno");
 	JLabel acoes = new JLabel("Ações disponíveis para o turno:");
@@ -123,7 +123,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(2);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
-				  jaMudouBotoes = true;
+				  telaInicio = false;
 			  } 
 			} );
 		//repete o mesmo processo do botao 2 jogadoes, para os outros botoes
@@ -134,7 +134,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(3);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
-				  jaMudouBotoes = true;
+				  telaInicio = false;
 			  } 
 			} );
 		
@@ -145,7 +145,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(4);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
-				  jaMudouBotoes = true;} 
+				  telaInicio = false;} 
 			} );
 		
 
@@ -155,7 +155,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(5);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
-				  jaMudouBotoes = true;} 
+				  telaInicio = false;} 
 			} );
 		
 		this.add(jogador6);
@@ -164,7 +164,7 @@ public class Menu extends JPanel {
 				  ctrl.setJogadores(6);
 				  t.criaPinos();
 				  m.atualizaBotoess(ctrl,t);
-				  jaMudouBotoes = true;} 
+				  telaInicio = false;} 
 			} );
 		
 		acabar.addActionListener(new ActionListener() { 
@@ -175,7 +175,7 @@ public class Menu extends JPanel {
 				  acabar.setVisible(false);
 				  escondeBotoes();
 				  m.insereBotoesInicio();
-				  jaMudouBotoes = false;
+				  telaInicio = true;
 				  t.repaint();
 			  } 
 			} );
@@ -293,12 +293,16 @@ public class Menu extends JPanel {
 					  ctrl.loadGame(carregar);
 					  t.criaCasas();
 					  t.criaPinos();
-					  if (jaMudouBotoes==false) {
+					  if (telaInicio==true) {
 						  m.atualizaBotoess(ctrl,t);
-						  jaMudouBotoes = true;
+						  turno.setEnabled(false);
+						  telaInicio = false;
+						  dados.setEnabled(true);
 					  }
 					  else {
 						  m.atualizaBotoes(ctrl, t);
+						  turno.setEnabled(false);
+						  dados.setEnabled(true);
 					  }
 				  } catch (IOException e1) {
 					  e1.printStackTrace();
@@ -333,9 +337,6 @@ public class Menu extends JPanel {
 					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
 					m.atualizaBotoes(ctrl,t);
 					if (c==0) {
-						aleatorio.setEnabled(false);
-						valores.setEnabled(false);
-						valores2.setEnabled(false);
 						dados.setEnabled(false);
 						turno.setEnabled(true);
 						salvar.setEnabled(false);
@@ -347,8 +348,16 @@ public class Menu extends JPanel {
 					  acabar.setVisible(false);
 					  escondeBotoes();
 					  m.insereBotoesInicio();
+					  telaInicio=true;
 					  t.repaint();
 					}
+					else if (c==1) {
+						turno.setEnabled(false);
+					}
+					ok.setEnabled(false);
+					valores.setEnabled(false);
+					valores2.setEnabled(false);
+					aleatorio.setEnabled(false);
 			  }
 		} );
 		
@@ -362,9 +371,6 @@ public class Menu extends JPanel {
 					int c = t.clicouNosDados(d[0],d[1]); //se c = 1, quer dizer que o jogador faliu e o botao de dados nao eh desabilitado
 					m.atualizaBotoes(ctrl,t);
 					if (c==0) {
-						aleatorio.setEnabled(false);
-						valores.setEnabled(false);
-						valores2.setEnabled(false);
 						dados.setEnabled(false);
 						turno.setEnabled(true);
 						salvar.setEnabled(false);
@@ -374,10 +380,18 @@ public class Menu extends JPanel {
 					  JOptionPane.showMessageDialog(t,msg);
 					  ctrl.novoJogo();
 					  acabar.setVisible(false);
+					  telaInicio=true;
 					  escondeBotoes();
 					  m.insereBotoesInicio();
 					  t.repaint();
 					}
+					else if (c==1) {
+						turno.setEnabled(false);
+					}
+					ok.setEnabled(false);
+					valores.setEnabled(false);
+					valores2.setEnabled(false);
+					aleatorio.setEnabled(false);
 			  }
 		} );
 		
@@ -398,19 +412,7 @@ public class Menu extends JPanel {
 		} );
 	
 		
-		addMouseListener(new MouseListener() {
-    		public void mouseEntered(MouseEvent e) {}
-    		public void mousePressed(MouseEvent e) {}
-    		public void mouseReleased(MouseEvent e) {}
-    		public void mouseExited(MouseEvent e) {}
-    		public void mouseClicked(MouseEvent e) {
-/* **** Mostrar coordenadas ***********  */
-    			int x=e.getX();
-    			int y=e.getY();
-    			String msg=String.format("x=%d y=%d\n",x,y);
-     			JOptionPane.showMessageDialog(m,msg);
-    		}
-    	});
+
 	
 	}
 	
